@@ -1,4 +1,5 @@
 import std/[os, osproc, strutils]
+import ./release_file
 
 proc isBinaryProgram(fileName: string): bool =
   var file = open(fileName, fmRead)
@@ -47,19 +48,34 @@ proc readLsbRelease(): string =
 # ```
 # Solaris 11.4.22.7.0
 # ```
+proc getName(candidate: string): string =
+  var index = 0
+  var name = "Linux"
 
+  while name == "Linux":
+    inc index
+    name = candidate.split(' ')[index]
+  
+  return name
 
 proc getOsName*(): string =
   if fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
     result = readLsbRelease()
-  elif fileExists("/etc/oracle-release"):
-    # RedHat
-    discard
-  elif fileExists("/etc/redhat-release"):
-    # RedHat
-    discard
-  elif fileExists("/etc/SuSE-release"):
-    discard
-
+  # elif fileExists("/etc/oracle-release"):
+  #   # RedHat
+  #   discard
+  # elif fileExists("/etc/redhat-release"):
+  #   # RedHat
+  #   discard
+  # elif fileExists("/etc/SuSE-release"):
+  #   discard
+  else:
+    var candidates: seq[string]
+    for file in ReleaseFileAndFormalNames.keys():
+      if fileExists(file):
+        candidates = ReleaseFileAndFormalNames[file]
+        break
+    if candidates.len == 1:
+      
 when isMainModule:
   echo getOsName()
