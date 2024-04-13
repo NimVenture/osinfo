@@ -267,9 +267,14 @@ proc `$`*(osvi: TVersionInfo): string =
     let si = getSystemInfo()
     # Test for the specific product
     if osvi.majorVersion == 10:
-      if osvi.ProductType == VER_NT_WORKSTATION:
-        result.add("Windows 10 ")
-      else: result.add("Windows Server 2016 ")
+      if osvi.buildNumber >= 22000:
+        if osvi.ProductType == VER_NT_WORKSTATION:
+          result.add("Windows 11 ")
+        else: result.add("Windows Server 2022 ")
+      else:
+        if osvi.ProductType == VER_NT_WORKSTATION:
+          result.add("Windows 10 ")
+        else: result.add("Windows Server 2016 ")
     if osvi.majorVersion == 6:
       if osvi.minorVersion == 0:
         if osvi.ProductType == VER_NT_WORKSTATION:
