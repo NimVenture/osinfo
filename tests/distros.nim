@@ -86,19 +86,6 @@ const Mint* = """
   BUG_REPORT_URL="http://linuxmint-troubleshooting-guide.readthedocs.io/en/latest/"
   """.unindent
 
-const Raspbian* = """
-  PRETTY_NAME="Raspbian GNU/Linux 10 (buster)"
-  NAME="Raspbian GNU/Linux"
-  VERSION_ID="10"
-  VERSION="10 (buster)"
-  VERSION_CODENAME=buster
-  ID=raspbian
-  ID_LIKE=debian
-  HOME_URL="http://www.raspbian.org/"
-  SUPPORT_URL="http://www.raspbian.org/RaspbianForums"
-  BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"
-  """.unindent
-
   # var releaseRegex = /VERSION_ID="(.*)"/
   # var codenameRegex = /VERSION="[0-9] \((.*)\)"/
 const Neoon* = """
@@ -129,22 +116,34 @@ const Debian* = """
 # The file /etc/SuSE-release has been marked as depreciated since openSUSE 13.1 and
 # will no longer be present in openSUSE Leap 15.0. use /etc/os-release instead.
 # https://en.opensuse.org/SDB:SUSE_and_openSUSE_Products_Version_Outputs
-# cat /usr/lib/os-release
-const Suse* = """
-  NAME="openSUSE Leap"
-  VERSION="15.0"
-  ID="opensuse-leap"
-  ID_LIKE="suse opensuse"
-  VERSION_ID="15.0"
-  PRETTY_NAME="openSUSE Leap 15.0"
-  ANSI_COLOR="0;32"
-  CPE_NAME="cpe:/o:opensuse:leap:15.0"
-  BUG_REPORT_URL="https://bugs.opensuse.org"
-  HOME_URL="https://www.opensuse.org/"
-  """
 
-const RedHat* = """
-  Red Hat Enterprise Linux release 8.4 (Ootpa)
+# cat /etc/SuSE-release
+const SuseRelease* = """
+  openSUSE 42.1 (x86_64)
+  VERSION = 42.1
+  CODENAME = Malachite
+  """.unindent
+
+# cat /usr/lib/os-release
+const SuseOsRelease* = """
+  NAME="openSUSE Leap"
+  VERSION="42.1"
+  VERSION_ID="42.1"
+  PRETTY_NAME="openSUSE Leap 42.1 (x86_64)"
+  ID=opensuse
+  ANSI_COLOR="0;32"
+  CPE_NAME="cpe:/o:opensuse:opensuse:42.1"
+  BUG_REPORT_URL="https://bugs.opensuse.org"
+  HOME_URL="https://opensuse.org/"
+  ID_LIKE="suse"
+  """.unindent
+
+# cat /etc/redhat-relase
+const RedHatRelease* = """
+  Red Hat Enterprise Linux release 8.5 (Ootpa)
+  """.unindent
+
+const RedHatOsRelease* = """
   NAME="Red Hat Enterprise Linux"
   VERSION="8.4 (Ootpa)"
   ID="rhel"
@@ -162,22 +161,25 @@ const RedHat* = """
   REDHAT_SUPPORT_PRODUCT_VERSION="8.4"
   """.unindent
 
-const CentOS* = """
-  CentOS Linux release 8.4.2105
+# cat /etc/redhat-release
+# cat /etc/system-release
+const CentOSRelease* = "CentOS Linux release 8.1.1911 (Core)"
+const CentOSOsRelease* = """
   NAME="CentOS Linux"
-  VERSION="8"
+  VERSION="8 (Core)"
   ID="centos"
   ID_LIKE="rhel fedora"
   VERSION_ID="8"
   PLATFORM_ID="platform:el8"
-  PRETTY_NAME="CentOS Linux 8.4.2105"
+  PRETTY_NAME="CentOS Linux 8 (Core)"
   ANSI_COLOR="0;31"
   CPE_NAME="cpe:/o:centos:centos:8"
   HOME_URL="https://www.centos.org/"
   BUG_REPORT_URL="https://bugs.centos.org/"
+  
   CENTOS_MANTISBT_PROJECT="CentOS-8"
   CENTOS_MANTISBT_PROJECT_VERSION="8"
-  REDHAT_SUPPORT_PRODUCT="CentOS"
+  REDHAT_SUPPORT_PRODUCT="centos"
   REDHAT_SUPPORT_PRODUCT_VERSION="8"
   """.unindent
 
@@ -223,10 +225,47 @@ const Solaris* = """
   Assembled 11 October 2021
   """.unindent
 
+# cat /etc/os-release
+const UbuntuOsRelease* = """
+  NAME="Ubuntu"
+  VERSION="20.10 (Groovy Gorilla)"
+  ID=ubuntu
+  ID_LIKE=debian
+  PRETTY_NAME="Ubuntu 20.10"
+  VERSION_ID="20.10"
+  HOME_URL="https://www.ubuntu.com/"
+  SUPPORT_URL="https://help.ubuntu.com/"
+  BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+  PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+  VERSION_CODENAME=groovy
+  UBUNTU_CODENAME=groovy
+  """.unindent
+
 # cat /etc/lsb-release
-const Ubuntu* = """
+const UbuntuRelease* = """
   DISTRIB_ID=Ubuntu
   DISTRIB_RELEASE=20.04
   DISTRIB_CODENAME=focal
   DISTRIB_DESCRIPTION="Ubuntu 20.04 LTS"
+  """.unindent
+
+# cat /etc/rpi-issue
+const RaspbianIssue* = """
+  Raspberry Pi 4 Model B
+  Raspbian GNU/Linux 10 (buster)
+  Kernel version 5.10.17-v7+
+  """.unindent
+
+# cat /etc/os-release
+const RaspbianOsRelease* = """
+  PRETTY_NAME="Raspbian GNU/Linux 10 (buster)"
+  NAME="Raspbian GNU/Linux"
+  VERSION_ID="10"
+  VERSION="10 (buster)"
+  VERSION_CODENAME=buster
+  ID=raspbian
+  ID_LIKE=debian
+  HOME_URL="http://www.raspbian.org/"
+  SUPPORT_URL="http://www.raspbian.org/RaspbianForums"
+  BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"
   """.unindent

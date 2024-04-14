@@ -1,28 +1,47 @@
 import ./distros
 import osinfo/[types, linux]
 
-block ubuntu:
+block ubuntuRelase:
   var os = new OsInfo
-  ubuntuCustomLogic(os, Ubuntu)
+  ubuntuCustomLogic(os, UbuntuRelease)
   doAssert os.release == "20.04"
   doAssert os.codename == "focal"
 
-block centos:
+block ubuntuOsRelase:
   var os = new OsInfo
-  centosCustomLogic(os, CentOS)
-  doAssert os.release == "8.4.2105"
+  osRelease(os, UbuntuOsRelease)
+  doAssert os.release == "20.10"
+  doAssert os.codename == "groovy"
+
+block centosRelease:
+  var os = new OsInfo
+  centosCustomLogic(os, CentOSRelease)
+  doAssert os.release == "8.1.1911"
   doAssert os.codename == ""
 
-block redhat:
+block centosOsRelease:
   var os = new OsInfo
-  centosCustomLogic(os, RedHat)
+  osRelease(os, CentOSOsRelease)
+  doAssert os.release == "8"
+  doAssert os.codename == ""
+
+block redhatRelease:
+  var os = new OsInfo
+  redhatCustomLogic(os, RedHatRelease)
+  doAssert os.release == "8.5"
+  doAssert os.codename == "Ootpa"
+
+block redhatOsRelease:
+  var os = new OsInfo
+  readhatOsRelease(os, RedHatOsRelease)
   doAssert os.release == "8.4"
   doAssert os.codename == "Ootpa"
 
-block suse:
+block suseRelease:
   var os = new OsInfo
-  suseCustomLogic(os, Suse)
-  doAssert os.release == "15.0"
+  suseCustomLogic(os, SuseRelease)
+  doAssert os.release == "42.1"
+  doAssert os.codename == "Malachite"
 
 block debian:
   var os = new OsInfo
@@ -35,3 +54,9 @@ block fedora:
   fedoraCustomLogic(os, Fedora)
   doAssert os.release == "17"
   doAssert os.codename == "Beefy Miracle"
+
+block raspbian:
+  var os = new OsInfo
+  osRelease(os, RaspbianOsRelease)
+  doAssert os.release == "10"
+  doAssert os.codename == "buster"
