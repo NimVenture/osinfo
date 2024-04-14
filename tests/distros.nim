@@ -178,7 +178,7 @@ const CentOS* = """
   """.unindent
 
   # /etc/os-release
-  const FreeBSD* = """
+const FreeBSD* = """
   NAME="FreeBSD"
   VERSION="12.2-RELEASE"
   ID=freebsd
@@ -187,12 +187,12 @@ const CentOS* = """
   PRETTY_NAME="FreeBSD 12.2-RELEASE"
   """.unindent
   # /etc/dragonfly-release
-  const DragonFly* = """
+const DragonFly* = """
   DragonFly v6.2.0.1
   """.unindent
 
   # /etc/lsb-release or /etc/redhat-release
-  const NetBSD* = """
+const NetBSD* = """
   DISTRIB_ID=NetBSD
   DISTRIB_RELEASE=9.2
   DISTRIB_CODENAME=cats
@@ -200,13 +200,21 @@ const CentOS* = """
   """.unindent
 
   # /etc/lsb-release
-  const AIX* = """
+const AIX* = """
   DISTRIB_ID=AIX
   DISTRIB_RELEASE=7.2
   DISTRIB_CODENAME=Sapphire
   DISTRIB_DESCRIPTION="IBM AIX 7.2 Sapphire"
   """.unindent
+
   # /etc/version
-  const OpenBSD* = """
+const OpenBSD* = """
   OpenBSD 7.0
+  """.unindent
+
+  # /etc/release
+const Solaris* = """
+  Oracle Solaris 11.4 X86
+  Copyright (c) 1983, 2021, Oracle and/or its affiliates. All rights reserved.
+  Assembled 11 October 2021
   """.unindent
