@@ -1,8 +1,10 @@
 import std/[os, strutils]
-import osinfo/darwin
+
 
 when defined(windows):
   import osinfo/win
+elif defined(macox) or defined(macosx):
+  import osinfo/darwin
 elif defined(posix):
   import osinfo/posix
 
@@ -12,11 +14,15 @@ type OsInfo* = ref object
   version*: string
   codename*: string
 
+proc `$`*(info: OsInfo): string =
+  info.os & " " & info.distro & " " & info.version & " " & info.codename
+
 proc getOsInfo(): OsInfo =
   result = new OsInfo
   when defined(windows):
-    discard
-  elif defined(bsd):
+    let osvi = getVersionInfo()
+    result.os = osvi.getOsInfo()
+  elif defined(bsd): 
     discard
   elif defined(linux):
     var unix_info: Utsname
@@ -34,8 +40,8 @@ proc getOsInfo(): OsInfo =
         result = "OpenBSD"
       of "NetBSD":
         result = "NetBSD"
-      of "Darwin":
-        result = getDarwinOsName($unix_info.release)
+      # of "Darwin":
+      #   result = getDarwinOsName($unix_info.release)
       of "AIX":
         result = "AIX"
       of "Solaris", "SunOS":
@@ -61,4 +67,13 @@ proc getOsInfo(): OsInfo =
   elif defined(haiku):
     discard
   elif defined(macox) or defined(macosx):
-    discard
+    var unix_info: Utsname
+    if uname(unix_info) != 0:
+      raiseOSError(osLastError())
+    let osInfo = getDarwinOsName($unix_info.release)
+    result.os = osInfo[0]
+    result.version = osInfo[1]
+    result.codename = osInfo[2]
+
+when isMainModule:
+  echo getOsInfo()
