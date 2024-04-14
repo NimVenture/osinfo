@@ -5,7 +5,8 @@ when defined(windows):
   import osinfo/win
 elif defined(macox) or defined(macosx):
   import osinfo/darwin
-elif defined(posix):
+else:
+  import osinfo/darwin
   import osinfo/posix
 
 type OsInfo* = ref object
@@ -22,58 +23,58 @@ proc getOsInfo(): OsInfo =
   when defined(windows):
     let osvi = getVersionInfo()
     result.os = osvi.getOsInfo()
-  elif defined(bsd): 
-    discard
-  elif defined(linux):
+  elif defined(macox) or defined(macosx):
     var unix_info: Utsname
     if uname(unix_info) != 0:
       raiseOSError(osLastError())
+    let osInfo = getDarwinOsInfo($unix_info.release)
+    result.os = osInfo[0]
+    result.version = osInfo[1]
+    result.codename = osInfo[2]
+  else:
+    # bsd, haiku, linux
+    var unix_info: Utsname
+    if uname(unix_info) != 0:
+      raiseOSError(osLastError())
+    template commonInfo(info: Utsname) = 
+      result.os = "Linux"
+      result.distro = $info.sysname
+      result.version = $info.version
     let sysname = $unix_info.sysname
     case sysname
       of "Linux":
-        result = "Linux"
+        unix_info.commonInfo
       of "FreeBSD", "DragonFly":
-        # no code name
-        result = "FreeBSD"
+        unix_info.commonInfo
       of "OpenBSD":
-        # no code name
-        result = "OpenBSD"
+        unix_info.commonInfo
       of "NetBSD":
-        result = "NetBSD"
-      # of "Darwin":
-      #   result = getDarwinOsName($unix_info.release)
+        unix_info.commonInfo
+      of "Darwin":
+        let osInfo = getDarwinOsInfo($unix_info.release)
+        result.os = osInfo[0]
+        result.version = osInfo[1]
+        result.codename = osInfo[2]
       of "AIX":
-        result = "AIX"
+        unix_info.commonInfo
       of "Solaris", "SunOS":
-        result = "Solaris"
+        unix_info.commonInfo
       of "Haiku":
         # System Name: Haiku
         # Node Name: haiku
         # Release: R1/beta1
         # Version: hrev55220+1
         # Machine: x86_64
-        result = "Haiku"
-      of "Windows":
-        result = "Windows"
+        unix_info.commonInfo
+
       of "OS/390":
-        # no code name
-        discard 
+        unix_info.commonInfo
       of "MVS":
-        # no code name
-        discard
+        unix_info.commonInfo
       of "z/OS":
-        # no code name
-        discard
-  elif defined(haiku):
-    discard
-  elif defined(macox) or defined(macosx):
-    var unix_info: Utsname
-    if uname(unix_info) != 0:
-      raiseOSError(osLastError())
-    let osInfo = getDarwinOsName($unix_info.release)
-    result.os = osInfo[0]
-    result.version = osInfo[1]
-    result.codename = osInfo[2]
+        unix_info.commonInfo
+      else:
+        unix_info.commonInfo
 
 when isMainModule:
   echo getOsInfo()

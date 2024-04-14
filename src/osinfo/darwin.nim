@@ -1,7 +1,7 @@
 
 import std/[strutils]
 
-proc getDarwinOsName*(release: string): (string, string, string) = 
+proc getDarwinOsInfo*(release: string): (string, string, string) = 
   var rel = release
   if '.' in rel:
     let split = rel.split(".")

@@ -27,7 +27,7 @@ proc getLsbInfo(): Option[(string, string, string)] =
     if arr.len == 3:
       result = some((arr[0], arr[1],arr[2]))
 
-proc getOsInfo*(): (string, string, string) =
+proc getLinuxOsInfo*(): (string, string, string) =
   if fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
     let lsbInfo = getLsbInfo()
     if lsbInfo.isSome:
@@ -41,4 +41,4 @@ proc getOsInfo*(): (string, string, string) =
     if candidates.len == 1:
       
 when isMainModule:
-  echo getOsInfo()
+  echo getLinuxOsInfo()
