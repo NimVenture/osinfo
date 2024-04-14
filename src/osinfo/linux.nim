@@ -1,5 +1,7 @@
-import std/[os, osproc, strutils, options]
+import std/[os, osproc, strutils, options, tables]
+import tinyre
 import ./release_file
+import ./types
 
 proc isBinaryProgram(fileName: string): bool =
   var file = open(fileName, fmRead)
@@ -27,6 +29,43 @@ proc getLsbInfo(): Option[(string, string, string)] =
     if arr.len == 3:
       result = some((arr[0], arr[1],arr[2]))
 
+proc ubuntuCustomLogic*(os: OsInfo, file: string) =
+  let releaseRegex = reU"DISTRIB_RELEASE=(\d+\.\d+)"
+  let codenameRegex = reU"DISTRIB_CODENAME=(\w+)"
+  let release = file.match(releaseRegex)
+  if release.len == 2: os.release = release[1]
+  let codename = file.match(codenameRegex)
+  if codename.len == 2: os.codename = codename[1]
+
+proc centosCustomLogic*(os: OsInfo, file: string) =
+  let releaseRegex = re"release ([^\s]+)"
+  let codenameRegex = re"\(([^\)]+)\)"
+  let release = file.match(releaseRegex)
+  if release.len == 2: os.release = release[1]
+  let codename = file.match(codenameRegex)
+  if codename.len == 2: os.codename = codename[1]
+
+proc suseCustomLogic*(os: OsInfo, file: string) =
+  let releaseRegex = reU"""VERSION_ID="([^"]+)"""
+  let release = file.match(releaseRegex)
+  if release.len == 2: os.release = release[1]
+
+proc debianCustomLogic*(os: OsInfo, file: string) =
+  let releaseRegex = reU"""VERSION_ID="([^"]+)"""
+  let codenameRegex = reU"VERSION_CODENAME=(\w+)"
+  let release = file.match(releaseRegex)
+  if release.len == 2: os.release = release[1]
+  let codename = file.match(codenameRegex)
+  if codename.len == 2: os.codename = codename[1]
+
+proc fedoraCustomLogic*(os: OsInfo, file: string) =
+  let releaseRegex = reU"VERSION_ID=(\d+)"
+  let codenameRegex = reU"\(([^\)]+)\)"
+  let release = file.match(releaseRegex)
+  if release.len == 2: os.release = release[1]
+  let codename = file.match(codenameRegex)
+  if codename.len == 2: os.codename = codename[1]
+
 proc getLinuxOsInfo*(): (string, string, string) =
   if fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
     let lsbInfo = getLsbInfo()
@@ -38,7 +77,8 @@ proc getLinuxOsInfo*(): (string, string, string) =
       if fileExists(file):
         candidates = ReleaseFileAndFormalNames[file]
         break
-    if candidates.len == 1:
+    # if candidates.len == 1:
       
 when isMainModule:
+  # https://github.com/retrohacker/getos/issues/109
   echo getLinuxOsInfo()

@@ -126,17 +126,21 @@ const Debian* = """
   BUG_REPORT_URL="https://bugs.debian.org/"
   """.unindent
 
+# The file /etc/SuSE-release has been marked as depreciated since openSUSE 13.1 and
+# will no longer be present in openSUSE Leap 15.0. use /etc/os-release instead.
+# https://en.opensuse.org/SDB:SUSE_and_openSUSE_Products_Version_Outputs
+# cat /usr/lib/os-release
 const Suse* = """
   NAME="openSUSE Leap"
-  VERSION="15.1"
+  VERSION="15.0"
   ID="opensuse-leap"
   ID_LIKE="suse opensuse"
-  VERSION_ID="15.1"
-  PRETTY_NAME="openSUSE Leap 15.1"
+  VERSION_ID="15.0"
+  PRETTY_NAME="openSUSE Leap 15.0"
   ANSI_COLOR="0;32"
+  CPE_NAME="cpe:/o:opensuse:leap:15.0"
+  BUG_REPORT_URL="https://bugs.opensuse.org"
   HOME_URL="https://www.opensuse.org/"
-  SUPPORT_URL="https://en.opensuse.org/Portal:Support"
-  BUG_REPORT_URL="https://bugzilla.opensuse.org/"
   """
 
 const RedHat* = """
@@ -217,4 +221,12 @@ const Solaris* = """
   Oracle Solaris 11.4 X86
   Copyright (c) 1983, 2021, Oracle and/or its affiliates. All rights reserved.
   Assembled 11 October 2021
+  """.unindent
+
+# cat /etc/lsb-release
+const Ubuntu* = """
+  DISTRIB_ID=Ubuntu
+  DISTRIB_RELEASE=20.04
+  DISTRIB_CODENAME=focal
+  DISTRIB_DESCRIPTION="Ubuntu 20.04 LTS"
   """.unindent

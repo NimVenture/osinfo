@@ -1,5 +1,5 @@
 import std/[os, strutils]
-
+import osinfo/types
 
 when defined(windows):
   import osinfo/win
@@ -9,14 +9,6 @@ else:
   import osinfo/darwin
   import osinfo/posix
 
-type OsInfo* = ref object
-  os*: string
-  distro*: string
-  version*: string
-  codename*: string
-
-proc `$`*(info: OsInfo): string =
-  info.os & " " & info.distro & " " & info.version & " " & info.codename
 
 proc getOsInfo(): OsInfo =
   result = new OsInfo
@@ -29,7 +21,7 @@ proc getOsInfo(): OsInfo =
       raiseOSError(osLastError())
     let osInfo = getDarwinOsInfo($unix_info.release)
     result.os = osInfo[0]
-    result.version = osInfo[1]
+    result.release = osInfo[1]
     result.codename = osInfo[2]
   else:
     # bsd, haiku, linux
@@ -39,7 +31,7 @@ proc getOsInfo(): OsInfo =
     template commonInfo(info: Utsname) = 
       result.os = "Linux"
       result.distro = $info.sysname
-      result.version = $info.version
+      result.release = $info.version
     let sysname = $unix_info.sysname
     case sysname
       of "Linux":
@@ -53,7 +45,7 @@ proc getOsInfo(): OsInfo =
       of "Darwin":
         let osInfo = getDarwinOsInfo($unix_info.release)
         result.os = osInfo[0]
-        result.version = osInfo[1]
+        result.release = osInfo[1]
         result.codename = osInfo[2]
       of "AIX":
         unix_info.commonInfo
