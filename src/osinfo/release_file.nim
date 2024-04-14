@@ -1,6 +1,7 @@
 import std/[tables]
 
 # http://linuxmafia.com/faq/Admin/release-files.html
+# https://www.freedesktop.org/software/systemd/man/latest/os-release.html
 
 const ReleaseFileAndFormalNames* = {
   "/etc/fedora-release" : @["Fedora"],

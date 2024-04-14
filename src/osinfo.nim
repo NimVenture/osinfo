@@ -6,10 +6,19 @@ when defined(windows):
 elif defined(posix):
   import osinfo/posix
 
-proc getOsName(): string =
+type OsInfo* = ref object
+  os*: string
+  distro*: string
+  version*: string
+  codename*: string
+
+proc getOsInfo(): OsInfo =
+  result = new OsInfo
   when defined(windows):
     discard
-  elif defined(posix):
+  elif defined(bsd):
+    discard
+  elif defined(linux):
     var unix_info: Utsname
     if uname(unix_info) != 0:
       raiseOSError(osLastError())
@@ -18,8 +27,10 @@ proc getOsName(): string =
       of "Linux":
         result = "Linux"
       of "FreeBSD", "DragonFly":
+        # no code name
         result = "FreeBSD"
       of "OpenBSD":
+        # no code name
         result = "OpenBSD"
       of "NetBSD":
         result = "NetBSD"
@@ -30,6 +41,24 @@ proc getOsName(): string =
       of "Solaris", "SunOS":
         result = "Solaris"
       of "Haiku":
+        # System Name: Haiku
+        # Node Name: haiku
+        # Release: R1/beta1
+        # Version: hrev55220+1
+        # Machine: x86_64
         result = "Haiku"
       of "Windows":
         result = "Windows"
+      of "OS/390":
+        # no code name
+        discard 
+      of "MVS":
+        # no code name
+        discard
+      of "z/OS":
+        # no code name
+        discard
+  elif defined(haiku):
+    discard
+  elif defined(macox) or defined(macosx):
+    discard

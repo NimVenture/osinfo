@@ -176,3 +176,37 @@ const CentOS* = """
   REDHAT_SUPPORT_PRODUCT="CentOS"
   REDHAT_SUPPORT_PRODUCT_VERSION="8"
   """.unindent
+
+  # /etc/os-release
+  const FreeBSD* = """
+  NAME="FreeBSD"
+  VERSION="12.2-RELEASE"
+  ID=freebsd
+  ID_LIKE=freebsd
+  VERSION_ID=12.2
+  PRETTY_NAME="FreeBSD 12.2-RELEASE"
+  """.unindent
+  # /etc/dragonfly-release
+  const DragonFly* = """
+  DragonFly v6.2.0.1
+  """.unindent
+
+  # /etc/lsb-release or /etc/redhat-release
+  const NetBSD* = """
+  DISTRIB_ID=NetBSD
+  DISTRIB_RELEASE=9.2
+  DISTRIB_CODENAME=cats
+  DISTRIB_DESCRIPTION="NetBSD 9.2 (Cats)"
+  """.unindent
+
+  # /etc/lsb-release
+  const AIX* = """
+  DISTRIB_ID=AIX
+  DISTRIB_RELEASE=7.2
+  DISTRIB_CODENAME=Sapphire
+  DISTRIB_DESCRIPTION="IBM AIX 7.2 Sapphire"
+  """.unindent
+  # /etc/version
+  const OpenBSD* = """
+  OpenBSD 7.0
+  """.unindent

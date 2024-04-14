@@ -1,4 +1,4 @@
-import std/[os, osproc, strutils]
+import std/[os, osproc, strutils, options]
 import ./release_file
 
 proc isBinaryProgram(fileName: string): bool =
@@ -12,31 +12,26 @@ proc isExecutable(path: string): bool =
   let p = getFilePermissions(path)
   result = fpUserExec in p and fpGroupExec in p and fpOthersExec in p
 
-proc readLsbRelease(): string =
-  let (output, _) = execCmdEx("/usr/bin/lsb_release -d -s", options = {})
-  result = output.strip
+proc execLsbRelease(): Option[string] =
+  let (output, code) = execCmdEx("/usr/bin/lsb_release -i -r -c -s", options = {})
+  if code == 0:
+    result = some(output.strip)
+  else:
+    result = none(string)
 
-proc getName(candidate: string): string =
-  var index = 0
-  var name = "Linux"
+proc getLsbInfo(): Option[(string, string, string)] =
+  ## Ubuntu, Debian, CentOS, Fedora, openSUSE, Arch Linux supported
+  let output = execLsbRelease()
+  if output.isSome:
+    let arr = output.get().splitLines()
+    if arr.len == 3:
+      result = some((arr[0], arr[1],arr[2]))
 
-  while name == "Linux":
-    inc index
-    name = candidate.split(' ')[index]
-  
-  return name
-
-proc getOsName*(): string =
+proc getOsInfo*(): (string, string, string) =
   if fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
-    result = readLsbRelease()
-  # elif fileExists("/etc/oracle-release"):
-  #   # RedHat
-  #   discard
-  # elif fileExists("/etc/redhat-release"):
-  #   # RedHat
-  #   discard
-  # elif fileExists("/etc/SuSE-release"):
-  #   discard
+    let lsbInfo = getLsbInfo()
+    if lsbInfo.isSome:
+      result = getLsbInfo().get()
   else:
     var candidates: seq[string]
     for file in ReleaseFileAndFormalNames.keys():
@@ -46,4 +41,4 @@ proc getOsName*(): string =
     if candidates.len == 1:
       
 when isMainModule:
-  echo getOsName()
+  echo getOsInfo()

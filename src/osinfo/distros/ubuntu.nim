@@ -17,6 +17,11 @@ proc ubuntuCustomLogic(file: string) =
 # DISTRIB_CODENAME=trusty
 # DISTRIB_DESCRIPTION="Ubuntu 14.04 LTS"
 
+# DISTRIB_ID=Ubuntu
+# DISTRIB_RELEASE=20.04
+# DISTRIB_CODENAME=focal
+# DISTRIB_DESCRIPTION="Ubuntu 20.04 LTS"
+
 # cat /etc/os-release
 # NAME="Ubuntu"
 # VERSION="13.10, Saucy Salamander"
