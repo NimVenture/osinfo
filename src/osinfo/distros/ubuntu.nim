@@ -2,8 +2,8 @@ import std/[strutils]
 import tinyre
 
 proc ubuntuCustomLogic(file: string) =
-  var releaseRegex = re"distrib_release=(.*)"
-  var codenameRegex = re"distrib_codename=(.*)"
+  var releaseRegex = re"Version:\s(..)"
+  var codenameRegex = re"Codename:\s(..)"
 
   var release = file.match(releaseRegex)
   echo release
@@ -11,16 +11,19 @@ proc ubuntuCustomLogic(file: string) =
   var codename = file.match(codenameRegex)
   echo codename.len
 
-when isMainModule:
-  const Ubuntu = """
-    Origin: Ubuntu
-    Label: Ubuntu
-    Suite: focal
-    Version: 20.04
-    Codename: Focal Fossa
-    Date: Thu, 23 Apr 2020 12:00:00 UTC
-    Architectures: amd64 arm64 armhf i386 ppc64el s390x
-    Components: main restricted universe multiverse
-    Description: Ubuntu 20.04 LTS
-    """.unindent
-  ubuntuCustomLogic(Ubuntu)
+# cat /etc/lsb-release
+# DISTRIB_ID=Ubuntu
+# DISTRIB_RELEASE=14.04
+# DISTRIB_CODENAME=trusty
+# DISTRIB_DESCRIPTION="Ubuntu 14.04 LTS"
+
+# cat /etc/os-release
+# NAME="Ubuntu"
+# VERSION="13.10, Saucy Salamander"
+# ID=ubuntu
+# ID_LIKE=debian
+# PRETTY_NAME="Ubuntu 13.10"
+# VERSION_ID="13.10"
+# HOME_URL="http://www.ubuntu.com/"
+# SUPPORT_URL="http://help.ubuntu.com/"
+# BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"

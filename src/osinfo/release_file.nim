@@ -1,5 +1,7 @@
 import std/[tables]
 
+# http://linuxmafia.com/faq/Admin/release-files.html
+
 const ReleaseFileAndFormalNames* = {
   "/etc/fedora-release" : @["Fedora"],
   "/etc/redhat-release" : @["RHEL","RHAS","Red Hat Linux","Scientific Linux","ScientificSL","ScientificCERNSLC","ScientificFermiLTS","ScientificSLF","CentOS"],
