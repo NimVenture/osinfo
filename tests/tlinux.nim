@@ -43,15 +43,21 @@ block suseRelease:
   doAssert os.release == "42.1"
   doAssert os.codename == "Malachite"
 
-block debian:
+block debianRelease:
   var os = new OsInfo
-  debianCustomLogic(os, Debian)
+  ubuntuCustomLogic(os, DebianRelease)
+  doAssert os.release == "10.9"
+  doAssert os.codename == "buster"
+
+block debianOsRelease:
+  var os = new OsInfo
+  osRelease(os, DebianOsRelease)
   doAssert os.release == "10"
   doAssert os.codename == "buster"
 
-block fedora:
+block fedoraOsRelease:
   var os = new OsInfo
-  fedoraCustomLogic(os, Fedora)
+  fedoraCustomLogic(os, FedoraOsRelease)
   doAssert os.release == "17"
   doAssert os.codename == "Beefy Miracle"
 

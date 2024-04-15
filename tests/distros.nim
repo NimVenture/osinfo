@@ -1,6 +1,14 @@
 import std/strutils
 
-const Fedora* = """
+# redhat, centos, fedora release file share same format.
+
+# cat /etc/fedora-release
+# cat /etc/redhat-relase
+const FedoraRelease* = """
+  Fedora release 34 (Thirty Four)
+  """.unindent
+
+const FedoraOsRelease* = """
   NAME=Fedora
   VERSION="17 (Beefy Miracle)"
   ID=fedora
@@ -12,7 +20,12 @@ const Fedora* = """
   BUG_REPORT_URL="https://bugzilla.redhat.com/"
   """.unindent
 
-const Alpine* = """
+# cat /etc/alpine-release
+const AlpineRelease* = """
+3.14.1
+""".unindent
+
+const AlpineOsRelease* = """
   NAME="Alpine Linux"
   ID=alpine
   VERSION_ID=3.14.0
@@ -21,7 +34,13 @@ const Alpine* = """
   BUG_REPORT_URL="https://bugs.alpinelinux.org/"
   """.unindent
 
-const Amazon* = """
+# cat /etc/system-release
+const AmazonRelease* = """
+Amazon Linux release 2 (Karoo)
+""".unindent
+
+# cat /etc/lsb-release
+const AmazonOsRelease* = """
   NAME="Amazon Linux"
   VERSION="2"
   ID="amzn"
@@ -35,6 +54,8 @@ const Amazon* = """
   Amazon Linux release 2 (Karoo)
   """.unindent
 
+# no lsb release, no code name
+# cat /etc/lsb-release
 const Arch* = """
   NAME="Arch Linux"
   ID=arch
@@ -45,6 +66,8 @@ const Arch* = """
   BUG_REPORT_URL="https://bugs.archlinux.org"
   """.unindent
 
+# no lsb release, no code name
+# cat /etc/lsb-release
 const Zorin* = """
   NAME="Zorin OS"
   VERSION="16.1"
@@ -58,6 +81,8 @@ const Zorin* = """
   PRIVACY_POLICY_URL="https://zorinos.com"
   """.unindent
 
+# no lsb release, no code name
+# cat /etc/lsb-release
 const Manjaro* = """
   NAME=Manjaro Linux
   ID=manjaro
@@ -74,6 +99,15 @@ const Manjaro* = """
   BUILD_ID="GNOME-2021.07"
   """.unindent
 
+# cat /etc/lsb-release
+const MintRelease* = """
+  LSB_VERSION=1.4
+  DISTRIB_ID=LinuxMint
+  DISTRIB_RELEASE=20.2
+  DISTRIB_CODENAME=uma
+  DISTRIB_DESCRIPTION="Linux Mint 20.2 Uma"
+  """.unindent
+
 const Mint* = """
   NAME="Linux Mint"
   VERSION="20 (Ulyana)"
@@ -88,7 +122,16 @@ const Mint* = """
 
   # var releaseRegex = /VERSION_ID="(.*)"/
   # var codenameRegex = /VERSION="[0-9] \((.*)\)"/
-const Neoon* = """
+# cat /etc/lsb-release
+const NeoonRelease* = """
+  LSB_VERSION=1.4
+  DISTRIB_ID=Neon
+  DISTRIB_RELEASE=20.04
+  DISTRIB_CODENAME=focal
+  DISTRIB_DESCRIPTION="KDE neon User Edition 20.04"
+  """.unindent
+
+const NeoonOsRelease* = """
   NAME="KDE neon"
   VERSION="20200218"
   ID=kde-neon
@@ -101,7 +144,14 @@ const Neoon* = """
   BUG_REPORT_URL="https://bugs.kde.org/"
   """.unindent
 
-const Debian* = """
+const DebianRelease* = """
+  DISTRIB_ID=Debian
+  DISTRIB_RELEASE=10.9
+  DISTRIB_CODENAME=buster
+  DISTRIB_DESCRIPTION="Debian GNU/Linux 10.9 (buster)"
+  """.unindent
+
+const DebianOsRelease* = """
   PRETTY_NAME="Debian GNU/Linux 10 (buster)"
   NAME="Debian GNU/Linux"
   VERSION_ID="10"
@@ -142,6 +192,8 @@ const SuseOsRelease* = """
 const RedHatRelease* = """
   Red Hat Enterprise Linux release 8.5 (Ootpa)
   """.unindent
+  # Red Hat Enterprise Linux release 8.0 Beta (Ootpa)
+
 
 const RedHatOsRelease* = """
   NAME="Red Hat Enterprise Linux"
@@ -164,6 +216,7 @@ const RedHatOsRelease* = """
 # cat /etc/redhat-release
 # cat /etc/system-release
 const CentOSRelease* = "CentOS Linux release 8.1.1911 (Core)"
+
 const CentOSOsRelease* = """
   NAME="CentOS Linux"
   VERSION="8 (Core)"
@@ -192,37 +245,95 @@ const FreeBSD* = """
   VERSION_ID=12.2
   PRETTY_NAME="FreeBSD 12.2-RELEASE"
   """.unindent
-  # /etc/dragonfly-release
-const DragonFly* = """
+
+# cat /etc/dragonfly-release
+const DragonFlyRelease* = """
   DragonFly v6.2.0.1
   """.unindent
 
-  # /etc/lsb-release or /etc/redhat-release
-const NetBSD* = """
+const DragonFlyOsRelease* = """
+  NAME="DragonFly BSD"
+  PRETTY_NAME="DragonFly BSD"
+  VERSION="x.y.z"
+  ID=dragonfly
+  ID_LIKE=dragonfly-bugtracker
+  HOME_URL="https://www.dragonflybsd.org/"
+  SUPPORT_URL="https://www.dragonflybsd.org/support/"
+  BUG_REPORT_URL="https://bugs.dragonflybsd.org/"
+  """.unindent
+
+# /etc/lsb-release or /etc/redhat-release
+const NetBSDRelease* = """
   DISTRIB_ID=NetBSD
   DISTRIB_RELEASE=9.2
   DISTRIB_CODENAME=cats
   DISTRIB_DESCRIPTION="NetBSD 9.2 (Cats)"
   """.unindent
 
-  # /etc/lsb-release
-const AIX* = """
+# cat /etc/os-release
+const NetBSDOsRelease* = """
+  NAME="NetBSD"
+  VERSION="9.1"
+  ID=netbsd
+  VERSION_ID=9.1
+  PRETTY_NAME="NetBSD 9.1"
+  HOME_URL="https://www.netbsd.org/"
+  SUPPORT_URL="https://www.netbsd.org/support/"
+  BUG_REPORT_URL="https://www.netbsd.org/support/"
+  """.unindent
+
+# cat /etc/lsb-release
+const AIXRelease* = """
   DISTRIB_ID=AIX
   DISTRIB_RELEASE=7.2
   DISTRIB_CODENAME=Sapphire
   DISTRIB_DESCRIPTION="IBM AIX 7.2 Sapphire"
   """.unindent
 
-  # /etc/version
-const OpenBSD* = """
+# cat /etc/os-release
+const AIXOsRelease* = """
+  NAME=AIX
+  VERSION=7.2
+  ID=aix
+  PRETTY_NAME="AIX 7.2"
+  HOME_URL="https://www.ibm.com/support/home/"
+  SUPPORT_URL="https://www.ibm.com/support/home/"
+  BUG_REPORT_URL="https://www.ibm.com/support/home/"
+  """.unindent
+
+# /etc/version
+const OpenBSDRelease* = """
   OpenBSD 7.0
   """.unindent
 
+const OpenBSDOsRelease* = """
+  NAME=OpenBSD
+  VERSION=6.9
+  ID=openbsd
+  PRETTY_NAME="OpenBSD 6.9"
+  HOME_URL="https://www.openbsd.org/"
+  SUPPORT_URL="https://www.openbsd.org/support.html"
+  BUG_REPORT_URL="https://www.openbsd.org/report.html"
+  """.unindent
+
   # /etc/release
-const Solaris* = """
+const SolarisRelease* = """
   Oracle Solaris 11.4 X86
   Copyright (c) 1983, 2021, Oracle and/or its affiliates. All rights reserved.
   Assembled 11 October 2021
+  """.unindent
+
+const SolarisOsRelease* = """
+  NAME="Solaris"
+  VERSION="11.4"
+  ID=solaris
+  ID_LIKE=solaris
+  PRETTY_NAME="Oracle Solaris 11.4"
+  ANSI_COLOR="0;34"
+  CPE_NAME= cpe:/o:oracle:solaris:11.4:1
+  HOME_URL="https://www.oracle.com/solaris"
+  SUPPORT_URL="https://www.oracle.com/solaris/support"
+  BUG_REPORT_URL="https://www.oracle.com/solaris/support"
   """.unindent
 
 # cat /etc/os-release
