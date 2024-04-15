@@ -54,6 +54,42 @@ const OsId2LsbId = {
   "amzn": "Amazon Linux"
 }.toTable
 
+proc extractRelease*(content: string): (string, string, string) =
+  let lines = content.splitLines
+  if lines.len == 1:
+    let line = lines[0]
+    let lQuote = line.find("(")
+    if lQuote != -1:
+      let rQuote = line.find(")", lQuote + 1)
+      if rQuote != -1:
+        result[2] = line[lQuote + 1 ..< rQuote]
+        var idx = lQuote - 2
+        var ver = newStringOfCap(idx)
+        while line[idx] != ' ':
+          ver.add line[idx]
+          idx = idx - 1
+        let probRelease = line[idx - "release".len ..< idx]
+        result[1] = ver
+        if probRelease == "release":
+          result[0] = line[0 ..< idx - "release".len - 1]
+        else:
+          result[0] = line[0 ..< idx]
+    else:
+      let spaceCount = line.count(' ')
+      if spaceCount == 1:
+        let cols = line.split(' ')
+        result[0] = cols[0]
+        if cols[1][0] == 'v':
+          # DragonFly v6.2.0.1
+          result[1] = cols[1][1 ..< ^1]
+        else:
+          result[1] = cols[1]
+      else:
+        echo line
+        echo spaceCount
+  else:
+    discard
+
 proc extractOsRelease*(content: string): (string, string, string) =
   let lines = splitLines(content)
 

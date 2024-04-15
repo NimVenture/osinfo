@@ -6,18 +6,18 @@ import std/strutils
 # cat /etc/redhat-relase
 const FedoraRelease* = """
   Fedora release 34 (Thirty Four)
-  """.unindent
+  """.unindent.strip
 
 # cat /etc/alpine-release
 const AlpineRelease* = """
   3.14.1
-  """.unindent
+  """.unindent.strip
 
 
 # cat /etc/system-release
 const AmazonRelease* = """
   Amazon Linux release 2 (Karoo)
-  """.unindent
+  """.unindent.strip
 
 
 # no version, no code name
@@ -72,7 +72,7 @@ const SuseRelease* = """
 # cat /etc/redhat-relase
 const RedHatRelease* = """
   Red Hat Enterprise Linux release 8.5 (Ootpa)
-  """.unindent
+  """.unindent.strip
   # Red Hat Enterprise Linux release 8.0 Beta (Ootpa)
 
 # cat /etc/redhat-release
@@ -82,7 +82,7 @@ const CentOSRelease* = "CentOS Linux release 8.1.1911 (Core)"
 # cat /etc/dragonfly-release
 const DragonFlyRelease* = """
   DragonFly v6.2.0.1
-  """.unindent
+  """.unindent.strip
 
 # /etc/lsb-release or /etc/redhat-release
 const NetBSDRelease* = """
@@ -103,7 +103,7 @@ const AIXRelease* = """
 # /etc/version
 const OpenBSDRelease* = """
   OpenBSD 7.0
-  """.unindent
+  """.unindent.strip
 
   # /etc/release
 const SolarisRelease* = """
@@ -130,17 +130,17 @@ const RaspbianIssue* = """
 # cat /etc/gentoo-release
 const GentooRelease* = """
   Gentoo Base System release 2.7
-  """.unindent
+  """.unindent.strip
 
 # cat /etc/slackware-version
 const SlackwareRelease* = """
   Slackware 15.0
-  """.unindent
+  """.unindent.strip
 
 # cat /etc/manjaro-release
 const ManjaroRelease* = """
   Manjaro Linux 21.2.1
-  """.unindent
+  """.unindent.strip
 
 # cat /etc/lsb-release
 const ElementaryOSRelease* = """
@@ -153,7 +153,7 @@ const ElementaryOSRelease* = """
 # cat /etc/fedora-release
 const FedoraServerRelease* = """
   Fedora Server 34 (Thirty Four)
-  """.unindent
+  """.unindent.strip
 
 # cat /etc/lsb-release
 # before Kali Linux 2021.3
@@ -167,4 +167,9 @@ const KaliLinuxRelease* = """
 ## cat /etc/void-release
 const VoidLinuxRelease* = """
   void-live x86_64 musl
-  """.unindent
+  """.unindent.strip
+
+when isMainModule:
+  echo repr SlackwareRelease
+  for line in SlackwareRelease.strip.splitLines():
+    echo line.strip.len
