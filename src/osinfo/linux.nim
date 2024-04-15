@@ -97,8 +97,8 @@ proc extractRelease*(content: string): (string, string, string) =
         else:
           result[1] = cols[1]
       else:
-        echo line
-        echo spaceCount
+        discard
+        # FIXME: cover this case see trelease.nim
   else:
     var
       idFound = false
