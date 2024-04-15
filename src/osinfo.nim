@@ -8,9 +8,10 @@ elif defined(macox) or defined(macosx):
 else:
   import osinfo/darwin
   import osinfo/posix
+  import osinfo/linux
 
 
-proc getOsInfo(): OsInfo =
+proc getOsInfo*(): OsInfo =
   result = new OsInfo
   when defined(windows):
     let osvi = getVersionInfo()
@@ -28,35 +29,37 @@ proc getOsInfo(): OsInfo =
     var unix_info: Utsname
     if uname(unix_info) != 0:
       raiseOSError(osLastError())
-    template commonInfo(info: Utsname) = 
+    template commonInfo(info: Utsname) =
       result.os = "Linux"
       result.distro = $info.sysname
       result.release = $info.version
     let sysname = $unix_info.sysname
     case sysname
-      of "Linux":
-        unix_info.commonInfo
-      of "FreeBSD", "DragonFly":
-        unix_info.commonInfo
-      of "OpenBSD":
-        unix_info.commonInfo
-      of "NetBSD":
-        unix_info.commonInfo
+      of "Linux", "FreeBSD", "DragonFly", "OpenBSD", "NetBSD", "Solaris",
+          "SunOS", "AIX":
+        let info = getLinuxOsInfo()
+        result.os = "Linux"
+        result.distro = info[0]
+        result.release = info[1]
+        result.codename = info[2]
       of "Darwin":
         let osInfo = getDarwinOsInfo($unix_info.release)
         result.os = osInfo[0]
         result.release = osInfo[1]
         result.codename = osInfo[2]
-      of "AIX":
-        unix_info.commonInfo
-      of "Solaris", "SunOS":
-        unix_info.commonInfo
+
       of "Haiku":
         # System Name: Haiku
         # Node Name: haiku
         # Release: R1/beta1
         # Version: hrev55220+1
         # Machine: x86_64
+        # cat /boot/system/system/build_info
+        # revision: 12345
+        # arch: x86_64
+        # build_date: Mon Nov 15 12:34:56 UTC 2021
+        # haiku_revisions: ab12cd34e5fg
+        # vendor: Haiku, Inc.
         unix_info.commonInfo
 
       of "OS/390":
