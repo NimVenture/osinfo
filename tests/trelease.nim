@@ -17,7 +17,7 @@ block debianRelease:
   doAssert extractRelease(DebianRelease) == ("Debian", "10.9", "buster")
 
 block dragonflyRelease:
-  doAssert extractRelease(DragonFlyRelease) == ("DragonFly", "6.2.0.", "")
+  doAssert extractRelease(DragonFlyRelease) == ("DragonFly", "6.2.0.1", "")
 
 block solarisRelease:
   echo extractRelease(SolarisRelease)

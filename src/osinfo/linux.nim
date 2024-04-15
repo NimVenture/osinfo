@@ -81,7 +81,7 @@ proc extractRelease*(content: string): (string, string, string) =
         result[0] = cols[0]
         if cols[1][0] == 'v':
           # DragonFly v6.2.0.1
-          result[1] = cols[1][1 ..< ^1]
+          result[1] = cols[1][1 .. ^1]
         else:
           result[1] = cols[1]
       else:
