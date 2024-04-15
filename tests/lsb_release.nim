@@ -143,6 +143,14 @@ const ManjaroRelease* = """
   """.unindent.strip
 
 # cat /etc/lsb-release
+const ManjaroLsbRelease* = """
+  DISTRIB_ID=ManjaroLinux
+  DISTRIB_RELEASE=15.12
+  DISTRIB_CODENAME=Capella
+  DISTRIB_DESCRIPTION="Manjaro Linux"
+  """.unindent
+
+# cat /etc/lsb-release
 const ElementaryOSRelease* = """
   DISTRIB_ID=elementaryOS
   DISTRIB_RELEASE=6.0

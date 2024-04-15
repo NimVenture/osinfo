@@ -68,7 +68,7 @@ const ZorinOsRelease* = """
   """.unindent
 
 # no lsb release, no code name
-# cat /etc/lsb-release
+# cat /etc/os-release
 const ManjaroOsRelease* = """
   NAME=Manjaro Linux
   ID=manjaro
@@ -84,6 +84,15 @@ const ManjaroOsRelease* = """
   VERSION_ID=21.0
   BUILD_ID="GNOME-2021.07"
   """.unindent
+
+# cat /etc/os-release
+# NAME="Manjaro Linux"
+# ID=manjaro
+# PRETTY_NAME="Manjaro Linux"
+# ANSI_COLOR="1;32"
+# HOME_URL="http://www.manjaro.org/"
+# SUPPORT_URL="http://www.manjaro.org/"
+# BUG_REPORT_URL="http://bugs.manjaro.org/"
 
 const MintOsRelease* = """
   NAME="Linux Mint"
