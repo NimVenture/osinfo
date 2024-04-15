@@ -1,7 +1,7 @@
 import std/strutils
 
 # redhat, centos, fedora, ubuntu release file share same format.
-# https://github.com/89luca89/distrobox/issues/744#issuecomment-1586884754
+# https://github.com/chef/os_release
 
 const FedoraOsRelease* = """
   NAME=Fedora
@@ -302,4 +302,15 @@ const VoidLinuxOsRelease* = """
   ANSI_COLOR="0;38;2;71;128;97"
 
   DISTRIB_ID="void"
+  """.unindent
+
+const GentooOsRelease* = """
+  NAME=Gentoo
+  ID=gentoo
+  PRETTY_NAME="Gentoo Linux"
+  ANSI_COLOR="1;32"
+  HOME_URL="https://www.gentoo.org/"
+  SUPPORT_URL="https://www.gentoo.org/support/"
+  BUG_REPORT_URL="https://bugs.gentoo.org/"
+  VERSION_ID="2.9"
   """.unindent

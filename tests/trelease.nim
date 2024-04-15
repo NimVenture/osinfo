@@ -31,8 +31,23 @@ block slackwareRelease:
 block manjaroRelease:
   echo extractRelease(ManjaroRelease)
 
+block manjaroLsbRelease:
+  doAssert extractRelease(ManjaroLsbRelease) == ("Manjaro Linux", "15.12", "Capella")
+
 block fedoraServerRelease:
   doAssert extractRelease(FedoraServerRelease) == ("Fedora Server", "43", "Thirty Four")
 
 block voidLinuxRelease:
   echo extractRelease(VoidLinuxRelease)
+
+block elementaryOSRelease:
+  doAssert extractRelease(ElementaryOSRelease) == ("elementary OS", "6.0", "odin")
+
+block neonRelease:
+  doAssert extractRelease(NeoonRelease) == ("KDE neon", "20.04", "focal")
+
+block mintRelease:
+  doAssert extractRelease(MintRelease) == ("Linux Mint", "20.2", "uma")
+
+block archRelease:
+  doAssert extractRelease(ArchRelease) == ("Arch Linux", "rolling", "")

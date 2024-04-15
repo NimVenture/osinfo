@@ -176,8 +176,3 @@ const KaliLinuxRelease* = """
 const VoidLinuxRelease* = """
   void-live x86_64 musl
   """.unindent.strip
-
-when isMainModule:
-  echo repr SlackwareRelease
-  for line in SlackwareRelease.strip.splitLines():
-    echo line.strip.len

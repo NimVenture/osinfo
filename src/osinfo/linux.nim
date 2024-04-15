@@ -30,7 +30,7 @@ proc getValue(s: string, name: static[string]): string =
     else:
       result = s[idx + startLen ..< s.len]
 
-const OsId2LsbId = {
+const OsId2Name = {
   "arch": "Arch Linux",
   "amzn": "Amazon Linux",
   "alpine": "Alpine Linux",
@@ -51,7 +51,16 @@ const OsId2LsbId = {
   "ubuntu": "Ubuntu",
   "dragonfly": "DragonFly BSD",
   "solaris": "Solaris",
-  "amzn": "Amazon Linux"
+  "amzn": "Amazon Linux",
+  "gentoo": "Gentoo Linux"
+}.toTable
+
+const DistribId2Name = {
+  "elementaryOS": "elementary OS",
+  "Neon": "KDE neon",
+  "LinuxMint": "Linux Mint",
+  "Arch": "Arch Linux",
+  "ManjaroLinux": "Manjaro Linux",
 }.toTable
 
 proc extractRelease*(content: string): (string, string, string) =
@@ -96,7 +105,10 @@ proc extractRelease*(content: string): (string, string, string) =
       if not idFound:
         let id = line.getValue("DISTRIB_ID")
         if id.len > 0:
-          result[0] = id
+          if id in DistribId2Name:
+            result[0] = DistribId2Name[id]
+          else:
+            result[0] = id
           idFound = true
       if not releaseFound:
         let release = line.getValue("DISTRIB_RELEASE")
@@ -131,7 +143,7 @@ proc extractOsRelease*(content: string): (string, string, string) =
       let id = line.getValue("ID")
       if id.len > 0:
         # failback to name, if unified name not found
-        result[0] = OsId2LsbId.getOrDefault(id, name)
+        result[0] = OsId2name.getOrDefault(id, name)
         idFound = true
     if not versionIdFound:
       let versionId = line.getValue("VERSION_ID")
@@ -148,8 +160,9 @@ proc extractOsRelease*(content: string): (string, string, string) =
       if code.len > 0:
         result[2] = code
         codeFound = true
-    if i == 5:
-      break
+    # if i == 5:
+    #   break
+    # when comes to ubuntu, gentoo, Manjaro this fails
 
   if not codeFound:
     let l = version.find("(")
@@ -166,23 +179,23 @@ proc extractOsRelease*(content: string): (string, string, string) =
   
 proc getLinuxOsInfo*(): (string, string, string) =
   ## returns (id, release, codename)
-  let etcRelease = fileExists("/etc/os-release")
-  let usrlibRelease = fileExists("/usr/lib/os-release")
-  if etcRelease or usrlibRelease:
+
+  if fileExists("/etc/os-release"):
     # https://www.linux.org/docs/man5/os-release.html
-    let content = readFile(if etcRelease: "/etc/os-release" else: "/usr/lib/os-release")
+    let content = readFile("/etc/os-release")
     result = extractOsRelease(content)
-  elif fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
-    let lsbInfo = getLsbInfo()
-    if lsbInfo.isSome:
-      result = getLsbInfo().get()
+  elif fileExists("/usr/lib/os-release"):
+    let content = readFile("/usr/lib/os-release")
+    result = extractOsRelease(content)
+  elif fileExists("/etc/lsb-release"):
+    let content = readFile("/etc/lsb-release")
+    result = extractRelease(content)
+  # elif fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
+  #   let lsbInfo = getLsbInfo()
+  #   if lsbInfo.isSome:
+  #     result = getLsbInfo().get()
   else:
-    var candidates: seq[string]
-    for file in ReleaseFileAndFormalNames.keys():
-      if fileExists(file):
-        candidates = ReleaseFileAndFormalNames[file]
-        break
-    # if candidates.len == 1:
+    discard
       
 when isMainModule:
   # https://github.com/retrohacker/getos/issues/109

@@ -6,7 +6,7 @@ block ubuntuOsRelase:
   # osRelease(os, UbuntuOsRelease)
   # doAssert os.release == "20.10"
   # doAssert os.codename == "groovy"
-  doAssert extractOsRelease(UbuntuOsRelease) == ("Ubuntu", "20.10", "Groovy Gorilla")
+  doAssert extractOsRelease(UbuntuOsRelease) == ("Ubuntu", "20.10", "groovy")
 
 block centosOsRelease:
   # var os = new OsInfo
@@ -57,7 +57,7 @@ block zorin:
   doAssert extractOsRelease(ZorinOsRelease) == ("Zorin OS", "16.1", "")
 
 block manjaro:
-  doAssert extractOsRelease(ManjaroOsRelease) == ("Manjaro Linux", "", "")
+  doAssert extractOsRelease(ManjaroOsRelease) == ("Manjaro Linux", "21.0", "")
 
 block linuxmint:
   doAssert extractOsRelease(MintOsRelease) == ("Linux Mint", "20", "Ulyana")
@@ -88,3 +88,6 @@ block amazon:
 
 block alpine:
   doAssert extractOsRelease(AlpineOsRelease) == ("Alpine Linux", "3.14.0", "")
+
+block gentoo:
+  doAssert extractOsRelease(GentooOsRelease) == ("Gentoo Linux", "2.9", "")
