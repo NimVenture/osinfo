@@ -1,4 +1,4 @@
-import ./distros
+import ./os_release
 import osinfo/[linux]
 
 block ubuntuOsRelase:
