@@ -10,14 +10,14 @@ const FedoraRelease* = """
 
 # cat /etc/alpine-release
 const AlpineRelease* = """
-3.14.1
-""".unindent
+  3.14.1
+  """.unindent
 
 
 # cat /etc/system-release
 const AmazonRelease* = """
-Amazon Linux release 2 (Karoo)
-""".unindent
+  Amazon Linux release 2 (Karoo)
+  """.unindent
 
 
 # no version, no code name
@@ -125,4 +125,46 @@ const RaspbianIssue* = """
   Raspberry Pi 4 Model B
   Raspbian GNU/Linux 10 (buster)
   Kernel version 5.10.17-v7+
+  """.unindent
+
+# cat /etc/gentoo-release
+const GentooRelease* = """
+  Gentoo Base System release 2.7
+  """.unindent
+
+# cat /etc/slackware-version
+const SlackwareRelease* = """
+  Slackware 15.0
+  """.unindent
+
+# cat /etc/manjaro-release
+const ManjaroRelease* = """
+  Manjaro Linux 21.2.1
+  """.unindent
+
+# cat /etc/lsb-release
+const ElementaryOSRelease* = """
+  DISTRIB_ID=elementaryOS
+  DISTRIB_RELEASE=6.0
+  DISTRIB_CODENAME=odin
+  DISTRIB_DESCRIPTION="elementary OS 6.0 Odin"
+  """.unindent
+
+# cat /etc/fedora-release
+const FedoraServerRelease* = """
+  Fedora Server 34 (Thirty Four)
+  """.unindent
+
+# cat /etc/lsb-release
+# before Kali Linux 2021.3
+const KaliLinuxRelease* = """
+  DISTRIB_ID=Kali
+  DISTRIB_RELEASE=2021.2
+  DISTRIB_CODENAME=kali-rolling
+  DISTRIB_DESCRIPTION="Kali GNU/Linux 2021.2"
+  """.unindent
+
+## cat /etc/void-release
+const VoidLinuxRelease* = """
+  void-live x86_64 musl
   """.unindent
