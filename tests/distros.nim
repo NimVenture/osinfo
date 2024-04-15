@@ -1,6 +1,6 @@
 import std/strutils
 
-# redhat, centos, fedora release file share same format.
+# redhat, centos, fedora, ubuntu release file share same format.
 
 # cat /etc/fedora-release
 # cat /etc/redhat-relase

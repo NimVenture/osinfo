@@ -1,4 +1,4 @@
-import std/[os, osproc, strutils, options, tables]
+import std/[os, osproc, strutils, options, tables, parseutils]
 import tinyre
 import ./release_file
 import ./types
@@ -86,11 +86,20 @@ proc readhatOsRelease*(os: OsInfo, file: string) =
 proc osRelease*(os: OsInfo, file: string) =
   let releaseRegex = reU"""VERSION_ID="([^"]+)"""
   let codenameRegex = reU"VERSION_CODENAME=(\w+)"
+  # In some versions of Solaris, the /etc/os-release file may not include a VERSION_ID field
+  let versionRegex = reU"""VERSION="?([^"]+)"""
   let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: os.codename = codename[1]
+  if release.len == 2: 
+    os.release = release[1]
+  else:
+    let version = file.match(versionRegex)
+    if version.len == 2:
+      os.release = version[1]
 
+  let codename = file.match(codenameRegex)
+  if codename.len == 2: 
+    os.codename = codename[1]
+  
 proc getValue(s: string, name: static[string]): string =
   let idx = s.find(name & "=")
   let startLen = name.len + 1
@@ -120,8 +129,57 @@ const OsId2LsbId = {
   "raspbian": "Raspbian GNU/Linux",
   "ubuntu": "Ubuntu",
   "dragonfly": "DragonFly",
-  "solaris": "solaris"
+  "solaris": "Solaris"
 }.toTable
+
+proc extractOsRelase*(content: string): (string, string, string) =
+  let lines = splitLines(content)
+
+  var
+    nameFound = false
+    idFound = false
+    versionFound = false
+    codeFound = false
+    name = ""
+  for i, line in lines:
+    if not nameFound:
+      name = line.getValue("NAME")
+      if name.len > 0:
+        nameFound = true
+    if not idFound:
+      let id = line.getValue("ID")
+      if id.len > 0:
+        # failback to name, if unified name not found
+        result[0] = OsId2LsbId.getOrDefault(id, name)
+        idFound = true
+    if not versionFound:
+      let versionId = line.getValue("VERSION_ID")
+      if versionId.len > 0:
+        result[1] = versionId
+        versionFound = true
+      else:
+        let version = line.getValue("VERSION")
+        if version.len > 0:
+          let l = version.find("(")
+          if l != -1:
+            # redhat, centos, fedora, ubuntu version contains code
+            # eg. VERSION="17 (Beefy Miracle)"
+            let lSpace = version.find(" ")
+            result[1] = version[0 ..< lSpace]
+            let code = version[l + 1 ..< version.len - 1]
+            result[2] = code
+            codeFound = true
+          else:
+            result[1] = version
+          versionFound = true
+
+    if not codeFound:
+      let code = line.getValue("VERSION_CODENAME")
+      if code.len > 0:
+        result[2] = code
+        codeFound = true
+    if i == 5:
+      break
 
 proc getLinuxOsInfo*(): (string, string, string) =
   ## returns (id, release, codename)
@@ -130,37 +188,7 @@ proc getLinuxOsInfo*(): (string, string, string) =
   if etcRelease or usrlibRelease:
     # https://www.linux.org/docs/man5/os-release.html
     let content = readFile(if etcRelease: "/etc/os-release" else: "/usr/lib/os-release")
-    let lines = splitLines(content)
-
-    var
-      nameFound = false
-      idFound = false
-      versionFound = false
-      codeFound = false
-      name = ""
-    for i, line in lines:
-      if not nameFound:
-        name = line.getValue("NAME")
-        if name.len > 0:
-          nameFound = true
-      if not idFound:
-        let id = line.getValue("ID")
-        if id.len > 0:
-          # failback to name, if unified name not found
-          result[0] = OsId2LsbId.getOrDefault(id, name)
-          idFound = true
-      if not versionFound:
-        let version = line.getValue("VERSION_ID")
-        if version.len > 0:
-          result[1] = version
-          versionFound = true
-      if not codeFound:
-        let code = line.getValue("VERSION_CODENAME")
-        if code.len > 0:
-          result[2] = code
-          codeFound = true
-      if i == 5:
-        break
+    result = extractOsRelase(content)
   elif fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
     let lsbInfo = getLsbInfo()
     if lsbInfo.isSome:
