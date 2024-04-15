@@ -1,6 +1,7 @@
 import std/strutils
 
 # redhat, centos, fedora, ubuntu release file share same format.
+# https://github.com/89luca89/distrobox/issues/744#issuecomment-1586884754
 
 const FedoraOsRelease* = """
   NAME=Fedora
@@ -289,4 +290,16 @@ const RaspbianOsRelease* = """
   HOME_URL="http://www.raspbian.org/"
   SUPPORT_URL="http://www.raspbian.org/RaspbianForums"
   BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"
+  """.unindent
+
+const VoidLinuxOsRelease* = """
+  NAME="Void"
+  ID="void"
+  PRETTY_NAME="Void Linux"
+  HOME_URL="https://voidlinux.org/"
+  DOCUMENTATION_URL="https://docs.voidlinux.org/"
+  LOGO="void-logo"
+  ANSI_COLOR="0;38;2;71;128;97"
+
+  DISTRIB_ID="void"
   """.unindent
