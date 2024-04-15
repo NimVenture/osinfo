@@ -1,25 +1,25 @@
-import std/[os, osproc, strutils, options, tables]
-import ./release_file
+import std/[os, strutils, options, tables]
+# import ./release_file
 
-proc isExecutable(path: string): bool =
-  let p = getFilePermissions(path)
-  result = fpUserExec in p and fpGroupExec in p and fpOthersExec in p
+# proc isExecutable(path: string): bool =
+#   let p = getFilePermissions(path)
+#   result = fpUserExec in p and fpGroupExec in p and fpOthersExec in p
 
-proc execLsbRelease(): Option[string] =
-  let (output, code) = execCmdEx("/usr/bin/lsb_release -i -r -c -s", options = {})
-  if code == 0:
-    result = some(output.strip)
-  else:
-    result = none(string)
+# proc execLsbRelease(): Option[string] =
+#   let (output, code) = execCmdEx("/usr/bin/lsb_release -i -r -c -s", options = {})
+#   if code == 0:
+#     result = some(output.strip)
+#   else:
+#     result = none(string)
 
-proc getLsbInfo(): Option[(string, string, string)] =
-  ## returns (id, release, codename)
-  ## Ubuntu, Debian, CentOS, Fedora, openSUSE, Arch Linux supported
-  let output = execLsbRelease()
-  if output.isSome:
-    let arr = output.get().splitLines()
-    if arr.len == 3:
-      result = some((arr[0], arr[1],arr[2]))
+# proc getLsbInfo(): Option[(string, string, string)] =
+#   ## returns (id, release, codename)
+#   ## Ubuntu, Debian, CentOS, Fedora, openSUSE, Arch Linux supported
+#   let output = execLsbRelease()
+#   if output.isSome:
+#     let arr = output.get().splitLines()
+#     if arr.len == 3:
+#       result = some((arr[0], arr[1],arr[2]))
   
 proc getValue(s: string, name: static[string]): string =
   let idx = s.find(name & "=")
