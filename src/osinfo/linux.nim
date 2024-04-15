@@ -88,7 +88,28 @@ proc extractRelease*(content: string): (string, string, string) =
         echo line
         echo spaceCount
   else:
-    discard
+    var
+      idFound = false
+      releaseFound = false
+      codeFound = false
+    for line in lines:
+      if not idFound:
+        let id = line.getValue("DISTRIB_ID")
+        if id.len > 0:
+          result[0] = id
+          idFound = true
+      if not releaseFound:
+        let release = line.getValue("DISTRIB_RELEASE")
+        if release.len > 0:
+          result[1] = release
+          releaseFound = true
+      if not codeFound:
+        let code = line.getValue("DISTRIB_CODENAME")
+        if code.len > 0:
+          result[2] = code
+          codeFound = true
+      if idFound and releaseFound and codeFound:
+        break
 
 proc extractOsRelease*(content: string): (string, string, string) =
   let lines = splitLines(content)

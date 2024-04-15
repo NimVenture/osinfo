@@ -2,7 +2,7 @@ import ./lsb_release
 import osinfo/[types, linux]
 
 block ubuntuRelase:
-  echo extractRelease(UbuntuRelease)
+  doAssert extractRelease(UbuntuRelease) == ("Ubuntu", "20.04", "focal")
 
 block centosRelease:
   doAssert extractRelease(CentOSRelease) == ("CentOS Linux", "1191.1.8", "Core")
@@ -14,7 +14,7 @@ block suseRelease:
   echo extractRelease(SuseRelease)
 
 block debianRelease:
-  echo extractRelease(DebianRelease)
+  doAssert extractRelease(DebianRelease) == ("Debian", "10.9", "buster")
 
 block dragonflyRelease:
   doAssert extractRelease(DragonFlyRelease) == ("DragonFly", "6.2.0.", "")
