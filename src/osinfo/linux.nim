@@ -30,7 +30,7 @@ proc getLsbInfo(): Option[(string, string, string)] =
     if arr.len == 3:
       result = some((arr[0], arr[1],arr[2]))
 
-proc ubuntuCustomLogic*(os: OsInfo, file: string) =
+proc ubuntuLsbRelease*(os: OsInfo, file: string) =
   let releaseRegex = reU"DISTRIB_RELEASE=(\d+\.\d+)"
   let codenameRegex = reU"DISTRIB_CODENAME=(\w+)"
   let release = file.match(releaseRegex)
@@ -38,7 +38,7 @@ proc ubuntuCustomLogic*(os: OsInfo, file: string) =
   let codename = file.match(codenameRegex)
   if codename.len == 2: os.codename = codename[1]
 
-proc redhatCustomLogic*(os: OsInfo, file: string) =
+proc redhatLsbRelease*(os: OsInfo, file: string) =
   let releaseRegex = re"release\s([^\s]+)"
   let codenameRegex = re"\(([^\)]+)\)"
   let release = file.match(releaseRegex)
@@ -46,59 +46,18 @@ proc redhatCustomLogic*(os: OsInfo, file: string) =
   let codename = file.match(codenameRegex)
   if codename.len == 2: os.codename = codename[1]
 
-proc centosCustomLogic*(os: OsInfo, file: string) =
+proc centosLsbRelease*(os: OsInfo, file: string) =
   let releaseRegex = re"release\s([^\s]+)"
   let release = file.match(releaseRegex)
   if release.len == 2: os.release = release[1]
  
-proc suseCustomLogic*(os: OsInfo, file: string) =
+proc suseLsbRelease*(os: OsInfo, file: string) =
   let releaseRegex = reU"VERSION\s=\s(\d+\.\d+)"
   let codenameRegex = reU"CODENAME\s=\s(\w+)"
   let release = file.match(releaseRegex)
   if release.len == 2: os.release = release[1]
   let codename = file.match(codenameRegex)
   if codename.len == 2: os.codename = codename[1]
-
-proc debianCustomLogic*(os: OsInfo, file: string) =
-  let releaseRegex = reU"""VERSION_ID="([^"]+)"""
-  let codenameRegex = reU"VERSION_CODENAME=(\w+)"
-  let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: os.codename = codename[1]
-
-proc fedoraCustomLogic*(os: OsInfo, file: string) =
-  let releaseRegex = reU"VERSION_ID=(\d+)"
-  let codenameRegex = reU"\(([^\)]+)\)"
-  let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: os.codename = codename[1]
-
-proc readhatOsRelease*(os: OsInfo, file: string) =
-  let releaseRegex = reU"""VERSION_ID="([^"]+)"""
-  let codenameRegex = reU"""VERSION="\d+\.\d+\s\((\w+)\)"""
-  let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: os.codename = codename[1]
-
-proc osRelease*(os: OsInfo, file: string) =
-  let releaseRegex = reU"""VERSION_ID="([^"]+)"""
-  let codenameRegex = reU"VERSION_CODENAME=(\w+)"
-  # In some versions of Solaris, the /etc/os-release file may not include a VERSION_ID field
-  let versionRegex = reU"""VERSION="?([^"]+)"""
-  let release = file.match(releaseRegex)
-  if release.len == 2: 
-    os.release = release[1]
-  else:
-    let version = file.match(versionRegex)
-    if version.len == 2:
-      os.release = version[1]
-
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: 
-    os.codename = codename[1]
   
 proc getValue(s: string, name: static[string]): string =
   let idx = s.find(name & "=")
