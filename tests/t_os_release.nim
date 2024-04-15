@@ -94,3 +94,12 @@ block gentoo:
 
 block voidLinux:
   doAssert extractOsRelease(VoidLinuxOsRelease) == ("Void Linux", "", "")
+
+block almalinux:
+  doAssert extractOsRelease(AlmaLinuxOsRelease) == ("AlmaLinux", "9.1", "Lime Lynx")
+
+block antergos:
+  doAssert extractOsRelease(AntergosOsRelease) == ("Antergos Linux", "18.11-ISO-Rolling", "")
+
+block slackware:
+  doAssert extractOsRelease(SlackwareOsRelease) == ("Slackware", "14.2", "")

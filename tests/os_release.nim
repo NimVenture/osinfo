@@ -314,3 +314,70 @@ const GentooOsRelease* = """
   BUG_REPORT_URL="https://bugs.gentoo.org/"
   VERSION_ID="2.9"
   """.unindent
+
+const AlmaLinuxOsRelease* = """
+  NAME="AlmaLinux"
+  VERSION="9.1 (Lime Lynx)"
+  ID="almalinux"
+  ID_LIKE="rhel centos fedora"
+  VERSION_ID="9.1"
+  PLATFORM_ID="platform:el9"
+  PRETTY_NAME="AlmaLinux 9.1 (Lime Lynx)"
+  ANSI_COLOR="0;34"
+  LOGO="fedora-logo-icon"
+  CPE_NAME="cpe:/o:almalinux:almalinux:9::baseos"
+  HOME_URL="https://almalinux.org/"
+  DOCUMENTATION_URL="https://wiki.almalinux.org/"
+  BUG_REPORT_URL="https://bugs.almalinux.org/"
+
+  ALMALINUX_MANTISBT_PROJECT="AlmaLinux-9"
+  ALMALINUX_MANTISBT_PROJECT_VERSION="9.1"
+  REDHAT_SUPPORT_PRODUCT="AlmaLinux"
+  REDHAT_SUPPORT_PRODUCT_VERSION="9.1"
+  """.unindent
+
+const AntergosOsRelease* = """
+  NAME="Antergos Linux"
+  VERSION="18.11-ISO-Rolling"
+  ID="antergos"
+  ID_LIKE="arch"
+  PRETTY_NAME="Antergos Linux"
+  CPE_NAME="cpe:/o:antergosproject:antergos:18.11"
+  ANSI_COLOR="1;34;40"
+  HOME_URL="https://antergos.com/"
+  SUPPORT_URL="https://forum.antergos.com/"
+  BUG_REPORT_URL="https://github.com/antergos"
+  """.unindent
+
+const SlackwareOsRelease* = """
+  NAME=Slackware
+  VERSION="14.2"
+  ID=slackware
+  VERSION_ID=14.2
+  PRETTY_NAME="Slackware 14.2"
+  ANSI_COLOR="0;34"
+  CPE_NAME="cpe:/o:slackware:slackware_linux:14.2"
+  HOME_URL="http://slackware.com/"
+  SUPPORT_URL="http://www.linuxquestions.org/questions/slackware-14/"
+  BUG_REPORT_URL="http://www.linuxquestions.org/questions/slackware-14/"
+  """.unindent
+
+const SLEDOsRelease* = """
+  NAME="SLED"
+  VERSION="12-SP3"
+  VERSION_ID="12.3"
+  PRETTY_NAME="SUSE Linux Enterprise Desktop 12 SP3"
+  ID="sled"
+  ANSI_COLOR="0;32"
+  CPE_NAME="cpe:/o:suse:sled:12:sp3"
+  """.unindent
+
+const SLES_SAPOsRelease* = """
+  NAME="SLES_SAP"
+  VERSION="12.0.1"
+  VERSION_ID="12.0.1"
+  PRETTY_NAME="SUSE Linux Enterprise Server for SAP Applications 12"
+  ID="sles_sap"
+  ANSI_COLOR="0;32"
+  CPE_NAME="cpe:/o:suse:sles_sap:12"
+  """.unindent

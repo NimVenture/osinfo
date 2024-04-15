@@ -53,7 +53,8 @@ const OsId2Name = {
   "solaris": "Solaris",
   "amzn": "Amazon Linux",
   "gentoo": "Gentoo Linux",
-  "void": "Void Linux"
+  "void": "Void Linux",
+  "almalinux": "AlmaLinux"
 }.toTable
 
 const DistribId2Name = {
