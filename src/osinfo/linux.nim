@@ -61,6 +61,7 @@ const DistribId2Name = {
   "LinuxMint": "Linux Mint",
   "Arch": "Arch Linux",
   "ManjaroLinux": "Manjaro Linux",
+  "Kali": "Kali Linux"
 }.toTable
 
 proc extractRelease*(content: string): (string, string, string) =
