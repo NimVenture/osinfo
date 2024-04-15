@@ -199,6 +199,7 @@ proc getLinuxOsInfo*(): (string, string, string) =
   #     result = getLsbInfo().get()
   else:
     discard
+    # FIXME: check distribution specific release file
       
 when isMainModule:
   # https://github.com/retrohacker/getos/issues/109
