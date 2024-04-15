@@ -1,6 +1,7 @@
 import std/strutils
 
 # redhat, centos, fedora, ubuntu release file share same format.
+# https://www.freedesktop.org/software/systemd/man/latest/os-release.html
 # https://github.com/chef/os_release
 
 const FedoraOsRelease* = """
