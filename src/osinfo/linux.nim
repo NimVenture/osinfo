@@ -98,9 +98,11 @@ proc extractOsRelease*(content: string): (string, string, string) =
   var
     nameFound = false
     idFound = false
+    versionIdFound = false
     versionFound = false
     codeFound = false
     name = ""
+    version = ""
   for i, line in lines:
     if not nameFound:
       name = line.getValue("NAME")
@@ -112,26 +114,15 @@ proc extractOsRelease*(content: string): (string, string, string) =
         # failback to name, if unified name not found
         result[0] = OsId2LsbId.getOrDefault(id, name)
         idFound = true
-    if not versionFound:
+    if not versionIdFound:
       let versionId = line.getValue("VERSION_ID")
       if versionId.len > 0:
         result[1] = versionId
+        versionIdFound = true
+    if not versionFound:
+      version = line.getValue("VERSION")
+      if version.len > 0:
         versionFound = true
-      else:
-        let version = line.getValue("VERSION")
-        if version.len > 0:
-          let l = version.find("(")
-          if l != -1:
-            # redhat, centos, fedora, ubuntu version contains code
-            # eg. VERSION="17 (Beefy Miracle)"
-            let lSpace = version.find(" ")
-            result[1] = version[0 ..< lSpace]
-            let code = version[l + 1 ..< version.len - 1]
-            result[2] = code
-            codeFound = true
-          else:
-            result[1] = version
-          versionFound = true
 
     if not codeFound:
       let code = line.getValue("VERSION_CODENAME")
@@ -141,6 +132,19 @@ proc extractOsRelease*(content: string): (string, string, string) =
     if i == 5:
       break
 
+  if not codeFound:
+    let l = version.find("(")
+    if l != -1:
+      # redhat, centos, fedora, ubuntu version contains code
+      # eg. VERSION="17 (Beefy Miracle)"
+      let lSpace = version.find(" ")
+      if not versionIdFound:
+        result[1] = version[0 ..< lSpace]
+      let code = version[l + 1 ..< version.len - 1]
+      result[2] = code
+    elif not versionIdFound:
+      result[1] = version
+  
 proc getLinuxOsInfo*(): (string, string, string) =
   ## returns (id, release, codename)
   let etcRelease = fileExists("/etc/os-release")

@@ -69,7 +69,7 @@ block suse:
   doAssert extractOsRelease(SuseOsRelease) == ("openSUSE", "42.1", "")
 
 block freebsd:
-  doAssert extractOsRelease(FreeBSD) == ("FreeBSD", "12.2-RELEASE", "")
+  doAssert extractOsRelease(FreeBSD) == ("FreeBSD", "12.2", "")
 
 block dragonfly:
   doAssert extractOsRelease(DragonFlyOsRelease) == ("DragonFly BSD", "x.y.z", "")
