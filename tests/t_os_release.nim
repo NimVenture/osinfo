@@ -49,3 +49,6 @@ block solaris:
   # doAssert os.release == "11.4"
   # doAssert os.codename == ""
   doAssert extractOsRelase(SolarisOsRelease) == ("Solaris", "11.4", "")
+
+block arch:
+  doAssert extractOsRelase(ArchOsRelease) == ("Arch Linux", "", "")

@@ -54,16 +54,27 @@ const AmazonOsRelease* = """
   Amazon Linux release 2 (Karoo)
   """.unindent
 
-# no lsb release, no code name
+# no version, no code name
+# /etr/arch-release could be empty
 # cat /etc/lsb-release
-const Arch* = """
+const ArchRelease* = """
+  DISTRIB_ID="Arch"
+  DISTRIB_RELEASE="rolling"
+  DISTRIB_DESCRIPTION="Arch Linux"
+  """.unindent
+
+const ArchOsRelease* = """
   NAME="Arch Linux"
-  ID=arch
   PRETTY_NAME="Arch Linux"
-  ANSI_COLOR="0;36"
-  HOME_URL="https://www.archlinux.org"
-  SUPPORT_URL="https://bbs.archlinux.org"
-  BUG_REPORT_URL="https://bugs.archlinux.org"
+  ID=arch
+  BUILD_ID=rolling
+  ANSI_COLOR="38;2;23;147;209"
+  HOME_URL="https://archlinux.org/"
+  DOCUMENTATION_URL="https://wiki.archlinux.org/"
+  SUPPORT_URL="https://bbs.archlinux.org/"
+  BUG_REPORT_URL="https://gitlab.archlinux.org/groups/archlinux/-/issues"
+  PRIVACY_POLICY_URL="https://terms.archlinux.org/docs/privacy-policy/"
+  LOGO=archlinux-logo
   """.unindent
 
 # no lsb release, no code name
@@ -173,6 +184,10 @@ const SuseRelease* = """
   VERSION = 42.1
   CODENAME = Malachite
   """.unindent
+
+  # SUSE Linux Enterprise Server 10 (x86_64)
+  # VERSION = 10
+  # PATCHLEVEL = 4
 
 # cat /usr/lib/os-release
 const SuseOsRelease* = """
