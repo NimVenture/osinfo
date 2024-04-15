@@ -30,16 +30,22 @@ proc getOsInfo*(): OsInfo =
     if uname(unix_info) != 0:
       raiseOSError(osLastError())
     template commonInfo(info: Utsname) =
-      result.os = "Linux"
-      result.distro = $info.sysname
+      result.os = $info.sysname
+      # result.distro = $info.sysname
       result.release = $info.version
     let sysname = $unix_info.sysname
     case sysname
-      of "Linux", "FreeBSD", "DragonFly", "OpenBSD", "NetBSD", "Solaris",
-          "SunOS", "AIX":
+      of "Linux":
         let info = getLinuxOsInfo()
         result.os = "Linux"
         result.distro = info[0]
+        result.release = info[1]
+        result.codename = info[2]
+      of "FreeBSD", "DragonFly", "OpenBSD", "NetBSD", "Solaris",
+          "SunOS", "AIX":
+        let info = getLinuxOsInfo()
+        result.os = sysname
+        # result.distro = info[0]
         result.release = info[1]
         result.codename = info[2]
       of "Darwin":
