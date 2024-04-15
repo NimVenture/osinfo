@@ -1,14 +1,5 @@
-import std/[os, osproc, strutils, options, tables, parseutils]
-import tinyre
+import std/[os, osproc, strutils, options, tables]
 import ./release_file
-import ./types
-
-proc isBinaryProgram(fileName: string): bool =
-  var file = open(fileName, fmRead)
-  var magicNumber: array[4, uint8]
-  discard file.readBytes(magicNumber, 0,  4)
-  file.close()
-  return magicNumber == [127.uint8, 'E'.ord.uint8, 'L'.ord.uint8, 'F'.ord.uint8]
 
 proc isExecutable(path: string): bool =
   let p = getFilePermissions(path)
@@ -29,35 +20,6 @@ proc getLsbInfo(): Option[(string, string, string)] =
     let arr = output.get().splitLines()
     if arr.len == 3:
       result = some((arr[0], arr[1],arr[2]))
-
-proc ubuntuLsbRelease*(os: OsInfo, file: string) =
-  let releaseRegex = reU"DISTRIB_RELEASE=(\d+\.\d+)"
-  let codenameRegex = reU"DISTRIB_CODENAME=(\w+)"
-  let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: os.codename = codename[1]
-
-proc redhatLsbRelease*(os: OsInfo, file: string) =
-  let releaseRegex = re"release\s([^\s]+)"
-  let codenameRegex = re"\(([^\)]+)\)"
-  let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: os.codename = codename[1]
-
-proc centosLsbRelease*(os: OsInfo, file: string) =
-  let releaseRegex = re"release\s([^\s]+)"
-  let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
- 
-proc suseLsbRelease*(os: OsInfo, file: string) =
-  let releaseRegex = reU"VERSION\s=\s(\d+\.\d+)"
-  let codenameRegex = reU"CODENAME\s=\s(\w+)"
-  let release = file.match(releaseRegex)
-  if release.len == 2: os.release = release[1]
-  let codename = file.match(codenameRegex)
-  if codename.len == 2: os.codename = codename[1]
   
 proc getValue(s: string, name: static[string]): string =
   let idx = s.find(name & "=")

@@ -1,5 +1,5 @@
 import ./lsb_release
-import osinfo/[types, linux]
+import osinfo/[types, lsb_release]
 
 block ubuntuRelase:
   var os = new OsInfo
