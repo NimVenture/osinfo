@@ -54,7 +54,7 @@ const ArchOsRelease* = """
 
 # no lsb release, no code name
 # cat /etc/lsb-release
-const Zorin* = """
+const ZorinOsRelease* = """
   NAME="Zorin OS"
   VERSION="16.1"
   ID=zorin
@@ -69,7 +69,7 @@ const Zorin* = """
 
 # no lsb release, no code name
 # cat /etc/lsb-release
-const Manjaro* = """
+const ManjaroOsRelease* = """
   NAME=Manjaro Linux
   ID=manjaro
   ID_LIKE=arch
@@ -85,7 +85,7 @@ const Manjaro* = """
   BUILD_ID="GNOME-2021.07"
   """.unindent
 
-const Mint* = """
+const MintOsRelease* = """
   NAME="Linux Mint"
   VERSION="20 (Ulyana)"
   ID=linuxmint
@@ -109,6 +109,14 @@ const NeoonOsRelease* = """
   SUPPORT_URL="https://forum.kde.org/viewforum.php?f=309"
   BUG_REPORT_URL="https://bugs.kde.org/"
   """.unindent
+
+  # NAME="KDE neon"
+  # VERSION="21.04"
+  # ID=kde-neon
+  # ID_LIKE=ubuntu
+  # VERSION_ID="21.04"
+  # PRETTY_NAME="KDE neon 21.04"
+  # ...
 
 const DebianOsRelease* = """
   PRETTY_NAME="Debian GNU/Linux 10 (buster)"

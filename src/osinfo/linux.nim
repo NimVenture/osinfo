@@ -76,7 +76,7 @@ const OsId2LsbId = {
   "zorin": "Zorin OS",
   "manjaro": "Manjaro Linux",
   "linuxmint": "Linux Mint", # notice: in lsb release file: DISTRIB_ID=LinuxMint
-  "kde-neon": "Neon",
+  "kde-neon": "KDE neon",
   "debian": "Debian",
   "opensuse": "openSUSE",
   "rhel": "Red Hat Enterprise Linux",
@@ -87,11 +87,12 @@ const OsId2LsbId = {
   "openbsd": "OpenBSD",
   "raspbian": "Raspbian GNU/Linux",
   "ubuntu": "Ubuntu",
-  "dragonfly": "DragonFly",
-  "solaris": "Solaris"
+  "dragonfly": "DragonFly BSD",
+  "solaris": "Solaris",
+  "amzn": "Amazon Linux"
 }.toTable
 
-proc extractOsRelase*(content: string): (string, string, string) =
+proc extractOsRelease*(content: string): (string, string, string) =
   let lines = splitLines(content)
 
   var
@@ -147,7 +148,7 @@ proc getLinuxOsInfo*(): (string, string, string) =
   if etcRelease or usrlibRelease:
     # https://www.linux.org/docs/man5/os-release.html
     let content = readFile(if etcRelease: "/etc/os-release" else: "/usr/lib/os-release")
-    result = extractOsRelase(content)
+    result = extractOsRelease(content)
   elif fileExists("/usr/bin/lsb_release") and isExecutable("/usr/bin/lsb_release"):
     let lsbInfo = getLsbInfo()
     if lsbInfo.isSome:
