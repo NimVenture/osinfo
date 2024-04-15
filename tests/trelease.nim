@@ -40,6 +40,9 @@ block fedoraServerRelease:
 block voidLinuxRelease:
   echo extractRelease(VoidLinuxRelease)
 
+block voidLinuxLsbRelease:
+  doAssert extractRelease(VoidLinuxLsbRelease) == ("Void Linux", "20210607", "Michel")
+
 block elementaryOSRelease:
   doAssert extractRelease(ElementaryOSRelease) == ("elementary OS", "6.0", "odin")
 

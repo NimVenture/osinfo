@@ -176,3 +176,13 @@ const KaliLinuxRelease* = """
 const VoidLinuxRelease* = """
   void-live x86_64 musl
   """.unindent.strip
+
+# The lsb-release file is not a standard file on Void Linux,
+# but it can be installed by installing the 'lsb-release' package.
+# cat /etc/lsb-release
+const VoidLinuxLsbRelease* = """
+  DISTRIB_ID=Void
+  DISTRIB_RELEASE=20210607
+  DISTRIB_CODENAME=Michel
+  DISTRIB_DESCRIPTION="Void Linux"
+  """.unindent

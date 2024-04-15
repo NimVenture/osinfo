@@ -91,3 +91,6 @@ block alpine:
 
 block gentoo:
   doAssert extractOsRelease(GentooOsRelease) == ("Gentoo Linux", "2.9", "")
+
+block voidLinux:
+  doAssert extractOsRelease(VoidLinuxOsRelease) == ("Void Linux", "", "")

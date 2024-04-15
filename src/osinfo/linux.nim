@@ -52,7 +52,8 @@ const OsId2Name = {
   "dragonfly": "DragonFly BSD",
   "solaris": "Solaris",
   "amzn": "Amazon Linux",
-  "gentoo": "Gentoo Linux"
+  "gentoo": "Gentoo Linux",
+  "void": "Void Linux"
 }.toTable
 
 const DistribId2Name = {
@@ -61,7 +62,8 @@ const DistribId2Name = {
   "LinuxMint": "Linux Mint",
   "Arch": "Arch Linux",
   "ManjaroLinux": "Manjaro Linux",
-  "Kali": "Kali Linux"
+  "Kali": "Kali Linux",
+  "Void": "Void Linux"
 }.toTable
 
 proc extractRelease*(content: string): (string, string, string) =
