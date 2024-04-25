@@ -8,10 +8,6 @@ when not defined(windows):
 
 import winlean
 
-
-when not declared(useWinUnicode):
-  const useWinUnicode* = not defined(useWinAnsi)
-
 type
   SYSTEM_INFO* {.final, pure.} = object
     wProcessorArchitecture*: int16
@@ -28,16 +24,6 @@ type
 
   LPSYSTEM_INFO* = ptr SYSTEM_INFO
   TSYSTEMINFO* = SYSTEM_INFO
-
-  TMemoryInfo* = object
-    MemoryLoad*: int ## occupied memory, in percent
-    TotalPhysMem*: int64 ## Total Physical memory, in bytes
-    AvailablePhysMem*: int64 ## Available physical memory, in bytes
-    TotalPageFile*: int64 ## The current committed memory limit
-                          ## for the system or the current process, whichever is smaller, in bytes.
-    AvailablePageFile*: int64 ## The maximum amount of memory the current process can commit, in bytes.
-    TotalVirtualMem*: int64 ## Total virtual memory, in bytes
-    AvailableVirtualMem*: int64 ## Available virtual memory, in bytes
 
   TOSVERSIONINFOEX {.final, pure.} = object
     dwOSVersionInfoSize: int32
@@ -62,8 +48,6 @@ type
     SPMinor*: int ## Minor service pack version
     SuiteMask*: int
     ProductType*: int
-
-  TPartitionInfo* = tuple[FreeSpace, TotalSpace: FileTime]
 
 const
   # SuiteMask - VersionInfo.SuiteMask
