@@ -9,6 +9,13 @@ when not defined(windows):
 import winlean
 include ./windefs
 
+type WindowsOSInfo* = object
+  version: string
+  edition: string
+  sp: string
+  buildNumber: int
+  arch: string
+
 proc getVersionInfo*(): TVersionInfo =
   ## Retrieves operating system info
   var osvi: TOSVERSIONINFOEX
@@ -62,206 +69,214 @@ proc getSystemInfo(): TSYSTEM_INFO =
 
   return systemi
 
-proc getOsInfo*(osvi: TVersionInfo, includeEdition = false, includeSp = false, includeBuild = false, includeArch = false): string =
+proc getOsInfo*(osvi: TVersionInfo): WindowsOSInfo =
   ## Turns a VersionInfo object into a string
   if osvi.platformID == VER_PLATFORM_WIN32_NT and osvi.majorVersion > 4:
-    result = "Microsoft"
+    # result = "Microsoft"
 
     let si = getSystemInfo()
     # Test for the specific product
     if osvi.majorVersion == 10:
       if osvi.buildNumber >= 22000:
         if osvi.ProductType == VER_NT_WORKSTATION:
-          result.add(" Windows 11")
-        else: result.add(" Windows Server 2022")
+          result.version = "Windows 11"
+        else: result.version = "Windows Server 2022"
       else:
         if osvi.ProductType == VER_NT_WORKSTATION:
-          result.add(" Windows 10")
-        else: result.add(" Windows Server 2016")
+          result.version = "Windows 10"
+        else: result.version = "Windows Server 2016"
     if osvi.majorVersion == 6:
       if osvi.minorVersion == 0:
         if osvi.ProductType == VER_NT_WORKSTATION:
-          result.add(" Windows Vista")
-        else: result.add(" Windows Server 2008")
+          result.version = "Windows Vista"
+        else: result.version = "Windows Server 2008"
       elif osvi.minorVersion == 1:
         if osvi.ProductType == VER_NT_WORKSTATION:
-          result.add(" Windows 7")
-        else: result.add(" Windows Server 2008 R2")
+          result.version = "Windows 7"
+        else: result.version = "Windows Server 2008 R2"
       elif osvi.minorVersion == 2:
         if osvi.ProductType == VER_NT_WORKSTATION:
-          result.add(" Windows 8")
-        else: result.add(" Windows Server 2012")
+          result.version = "Windows 8"
+        else: result.version = "Windows Server 2012"
       elif osvi.minorVersion == 3:
         if osvi.ProductType == VER_NT_WORKSTATION:
-          result.add(" Windows 8.1")
-        else: result.add(" Windows Server 2012 R2")
+          result.version = "Windows 8.1"
+        else: result.version = "Windows Server 2012 R2"
 
     # The GetProductInfo return result works when dwOSMajorVersion minimum value is 6.
-    if includeEdition and osvi.majorVersion >= 6:
+    if osvi.majorVersion >= 6:
       let dwType = getProductInfo(osvi.majorVersion, osvi.minorVersion, 0, 0)
       case dwType
       of PRODUCT_PRO_WORKSTATION:
-        result.add(" Pro for Workstations")
+        result.edition = "Pro for Workstations"
       of PRODUCT_PRO_WORKSTATION_N:
-        result.add(" Pro for Workstations N")
+       result.edition = "Pro for Workstations N"
       of PRODUCT_EDUCATION:
-        result.add(" Education")
+       result.edition = "Education"
       of PRODUCT_EDUCATION_N:
-        result.add(" Education N")
+       result.edition = "Education N"
       of PRODUCT_ULTIMATE:
-        result.add(" Ultimate")
+       result.edition = "Ultimate"
       of PRODUCT_PROFESSIONAL:
-        result.add(" Professional")
+       result.edition = "Professional"
       of PRODUCT_HOME_PREMIUM:
-        result.add(" Home Premium")
+       result.edition = "Home Premium"
       of PRODUCT_HOME_BASIC:
-        result.add(" Home Basic")
+       result.edition = "Home Basic"
       of PRODUCT_ENTERPRISE:
-        result.add(" Enterprise")
+       result.edition = "Enterprise"
       of PRODUCT_ENTERPRISE_E:
-        result.add(" Enterprise E")
+       result.edition = "Enterprise E"
       of PRODUCT_ENTERPRISE_EVALUATION:
-        result.add(" Enterprise Evaluation")
+       result.edition = "Enterprise Evaluation"
       of PRODUCT_ENTERPRISE_N:
-        result.add(" Enterprise N")
+       result.edition = "Enterprise N"
       of PRODUCT_ENTERPRISE_N_EVALUATION:
-        result.add(" Enterprise N Evaluation")
+       result.edition = "Enterprise N Evaluation"
       of PRODUCT_ENTERPRISE_S:
-        result.add(" Enterprise 2015 LTSB")
+       result.edition = "Enterprise 2015 LTSB"
       of PRODUCT_ENTERPRISE_S_EVALUATION:
-        result.add(" Enterprise 2015 LTSB Evaluation")
+       result.edition = "Enterprise 2015 LTSB Evaluation"
       of PRODUCT_ENTERPRISE_S_N:
-        result.add(" Enterprise 2015 LTSB N")
+       result.edition = "Enterprise 2015 LTSB N"
       of PRODUCT_ENTERPRISE_S_N_EVALUATION:
-        result.add(" Enterprise 2015 LTSB N Evaluation")
+       result.edition = "Enterprise 2015 LTSB N Evaluation"
       of PRODUCT_BUSINESS:
-        result.add(" Business")
+       result.edition = "Business"
       of PRODUCT_STARTER:
-        result.add(" Starter")
+       result.edition = "Starter"
       of PRODUCT_CLUSTER_SERVER:
-        result.add(" Cluster Server")
+       result.edition = "Cluster Server"
       of PRODUCT_DATACENTER_SERVER:
-        result.add(" Datacenter")
+       result.edition = "Datacenter"
       of PRODUCT_DATACENTER_SERVER_CORE:
-        result.add(" Datacenter (core installation)")
+       result.edition = "Datacenter (core installation)"
       of PRODUCT_DATACENTER_SERVER_CORE_V:
-        result.add(" Server Datacenter without Hyper-V (core installation)")
+       result.edition = "Server Datacenter without Hyper-V (core installation)"
       of PRODUCT_DATACENTER_SERVER_V:
-        result.add(" Server Datacenter without Hyper-V (full installation)")
+       result.edition = "Server Datacenter without Hyper-V (full installation)"
       of PRODUCT_ENTERPRISE_SERVER:
-        result.add(" Server Enterprise (full installation)")
+       result.edition = "Server Enterprise (full installation)"
       of PRODUCT_ENTERPRISE_SERVER_CORE:
-        result.add(" Server Enterprise (core installation)")
+       result.edition = "Server Enterprise (core installation)"
       of PRODUCT_ENTERPRISE_SERVER_CORE_V:
-        result.add(" Server Enterprise without Hyper-V (core installation)")
+       result.edition = "Server Enterprise without Hyper-V (core installation)"
       of PRODUCT_ENTERPRISE_SERVER_V:
-        result.add(" Server Enterprise without Hyper-V (full installation)")
+       result.edition = "Server Enterprise without Hyper-V (full installation)"
       of PRODUCT_ENTERPRISE_SERVER_IA64:
-        result.add(" Server Enterprise for Itanium-based Systems")
+       result.edition = "Server Enterprise for Itanium-based Systems"
       of PRODUCT_SMALLBUSINESS_SERVER:
-        result.add(" Small Business Server")
+       result.edition = "Small Business Server"
       of PRODUCT_STANDARD_SERVER:
-        result.add(" Standard")
+       result.edition = "Standard"
       of PRODUCT_STANDARD_SERVER_CORE:
-        result.add(" Standard (core installation)")
+       result.edition = "Standard (core installation)"
       of PRODUCT_WEB_SERVER:
-        result.add(" Web Server")
+       result.edition = "Web Server"
       of PRODUCT_STORAGE_ENTERPRISE_SERVER:
-        result.add(" Storage Server Enterprise")
+       result.edition = "Storage Server Enterprise"
       of PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE:
-        result.add(" Storage Server Enterprise (core installation) ")
+       result.edition = "Storage Server Enterprise (core installation)"
       of PRODUCT_STORAGE_EXPRESS_SERVER:
-        result.add(" Storage Server Express")
+       result.edition = "Storage Server Express"
       of PRODUCT_STORAGE_STANDARD_SERVER:
-        result.add(" Storage Server Standard")
+       result.edition = "Storage Server Standard"
       of PRODUCT_STORAGE_WORKGROUP_SERVER:
-        result.add(" Storage Server Workgroup")
+       result.edition = "Storage Server Workgroup"
       else:
         discard
     # End of Windows 6.*
 
     elif osvi.majorVersion == 5 and osvi.minorVersion == 2:
       if getSystemMetrics(SM_SERVERR2) != 0:
-        result.add(" Windows Server 2003 R2")
+        result.version = "Windows Server 2003 R2"
       elif (osvi.SuiteMask and VER_SUITE_PERSONAL) != 0: # Not sure if this will work
-        result.add(" Windows Storage Server 2003")
+        result.version = "Windows Storage Server 2003"
       elif (osvi.SuiteMask and VER_SUITE_WH_SERVER) != 0:
-        result.add(" Windows Home Server")
+        result.version = "Windows Home Server"
       elif osvi.ProductType == VER_NT_WORKSTATION: 
       # and
       #     si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64:
-        result.add(" Windows XP Professional")
+        result.version = "Windows XP Professional"
       else:
-        result.add(" Windows Server 2003")
+        result.version = "Windows Server 2003"
 
       # Test for the specific product
-      if includeEdition and osvi.ProductType != VER_NT_WORKSTATION:
+      if osvi.ProductType != VER_NT_WORKSTATION:
         if si.wProcessorArchitecture.uint == PROCESSOR_ARCHITECTURE_IA64:
           if (osvi.SuiteMask and VER_SUITE_DATACENTER) != 0:
-            result.add(" Datacenter for Itanium-based Systems")
+            result.edition = "Datacenter for Itanium-based Systems"
           elif (osvi.SuiteMask and VER_SUITE_ENTERPRISE) != 0:
-            result.add(" Enterprise for Itanium-based Systems")
+            result.edition = "Enterprise for Itanium-based Systems"
         # elif si.wProcessorArchitecture.uint == PROCESSOR_ARCHITECTURE_AMD64:
         #   if (osvi.SuiteMask and VER_SUITE_DATACENTER) != 0:
-        #     result.add("Datacenter x64 Edition")
+        #     result.edition = "Datacenter x64 Edition")
         #   elif (osvi.SuiteMask and VER_SUITE_ENTERPRISE) != 0:
-        #     result.add("Enterprise x64 Edition")
+        #     result.edition = "Enterprise x64 Edition")
         #   else:
-        #     result.add("Standard x64 Edition")
+        #     result.edition = "Standard x64 Edition")
         else:
           if (osvi.SuiteMask and VER_SUITE_COMPUTE_SERVER) != 0:
-            result.add(" Compute Cluster")
+            result.edition = "Compute Cluster"
           elif (osvi.SuiteMask and VER_SUITE_DATACENTER) != 0:
-            result.add( "Datacenter")
+            result.edition = "Datacenter"
           elif (osvi.SuiteMask and VER_SUITE_ENTERPRISE) != 0:
-            result.add(" Enterprise")
+            result.edition = "Enterprise"
           elif (osvi.SuiteMask and VER_SUITE_BLADE) != 0:
-            result.add(" Web")
+            result.edition = "Web"
           else:
-            result.add(" Standard")
+            result.edition = "Standard"
     # End of 5.2
 
     elif osvi.majorVersion == 5 and osvi.minorVersion == 1:
-      result.add(" Windows XP")
+      result.version = "Windows XP"
       if (osvi.SuiteMask and VER_SUITE_PERSONAL) != 0:
-        result.add(" Home Edition")
+        result.edition = "Home Edition"
       else:
-        result.add(" Professional")
+        result.edition = "Professional"
     # End of 5.1
 
     elif osvi.majorVersion == 5 and osvi.minorVersion == 0:
-      result.add(" Windows 2000")
+      result.version = "Windows 2000"
       if osvi.ProductType == VER_NT_WORKSTATION:
-        result.add(" Professional")
+        result.edition = "Professional"
       else:
         if (osvi.SuiteMask and VER_SUITE_DATACENTER) != 0:
-          result.add(" Datacenter Server")
+          result.edition = "Datacenter Server"
         elif (osvi.SuiteMask and VER_SUITE_ENTERPRISE) != 0:
-          result.add(" Advanced Server")
+          result.edition = "Advanced Server"
         else:
-          result.add(" Server")
+          result.edition = "Server"
     # End of 5.0
 
     # Include service pack (if any) and build number.
-    if includeSp and len(osvi.SPVersion) > 0:
-      result.add(" ")
-      result.add(osvi.SPVersion)
-    if includeBuild:
-      result.add(" (build " & $osvi.buildNumber & ")")
+    if len(osvi.SPVersion) > 0:
+      result.sp = osvi.SPVersion
+    result.buildNumber = osvi.buildNumber
 
-    if includeArch and osvi.majorVersion >= 6:
+    if osvi.majorVersion >= 6:
       if si.wProcessorArchitecture.uint == PROCESSOR_ARCHITECTURE_AMD64:
-        result.add(", 64-bit")
+        result.arch = "x64"
       elif si.wProcessorArchitecture.uint == PROCESSOR_ARCHITECTURE_INTEL:
-        result.add(", 32-bit")
+        result.arch = "x86"
   else:
     # Windows 98 etc...
-    result = "Unknown version of windows[Kernel version <= 4]"
+    # result = "Unknown version of windows[Kernel version <= 4]"
+    discard
 
-proc `$`*(osvi: TVersionInfo): string = osvi.getOsInfo(true, true, true, true)
+proc getOsInfo*(): WindowsOSInfo =
+  let osvi = getVersionInfo()
+  getOsInfo(osvi)
+
+proc `$`*(info: WindowsOSInfo): string = 
+  result = info.version & " " & info.edition 
+  if info.sp.len > 0:
+    result.add " " & info.sp 
+  result.add " " & "(build " & $info.buildNumber & ")" & ", " & info.arch
+
+proc `$`*(osvi: TVersionInfo): string =
+  $getOsInfo(osvi)
 
 when isMainModule:
 
-  let osvi = getVersionInfo()
-
-  echo($osvi)
+  echo getOsInfo()
