@@ -10,11 +10,11 @@ import winlean
 include ./windefs
 
 type WindowsOSInfo* = object
-  version: string
-  edition: string
-  sp: string
-  buildNumber: int
-  arch: string
+  version*: string
+  edition*: string
+  sp*: string
+  buildNumber*: int
+  arch*: string
 
 proc getVersionInfo*(): TVersionInfo =
   ## Retrieves operating system info

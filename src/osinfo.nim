@@ -14,8 +14,11 @@ else:
 proc getOsInfo*(): OsInfo =
   result = new OsInfo
   when defined(windows):
-    let osvi = getVersionInfo()
-    result.os = osvi.getOsInfo()
+    let info = win.getOsInfo()
+    result.os = "Windows"
+    result.distro = info.version
+    result.edition = info.edition
+    result.release = $info.buildNumber
   elif defined(macox) or defined(macosx):
     var unix_info: Utsname
     if uname(unix_info) != 0:
