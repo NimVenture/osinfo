@@ -7,152 +7,7 @@ when not defined(windows):
   {.error: "This module is only supported on Windows".}
 
 import winlean
-
-type
-  SYSTEM_INFO* {.final, pure.} = object
-    wProcessorArchitecture*: int16
-    wReserved*: int16
-    dwPageSize*: int32
-    lpMinimumApplicationAddress*: pointer
-    lpMaximumApplicationAddress*: pointer
-    dwActiveProcessorMask*: ptr int32
-    dwNumberOfProcessors*: int32
-    dwProcessorType*: int32
-    dwAllocationGranularity*: int32
-    wProcessorLevel*: int16
-    wProcessorRevision*: int16
-
-  LPSYSTEM_INFO* = ptr SYSTEM_INFO
-  TSYSTEMINFO* = SYSTEM_INFO
-
-  TOSVERSIONINFOEX {.final, pure.} = object
-    dwOSVersionInfoSize: int32
-    dwMajorVersion: int32
-    dwMinorVersion: int32
-    dwBuildNumber: int32
-    dwPlatformId: int32
-    szCSDVersion: array[0..127, char]
-    wServicePackMajor: int16
-    wServicePackMinor: int16
-    wSuiteMask: int16
-    wProductType: int8
-    wReserved: char
-
-  TVersionInfo* = object
-    majorVersion*: int
-    minorVersion*: int
-    buildNumber*: int
-    platformID*: int
-    SPVersion*: string ## Full Service pack version string
-    SPMajor*: int ## Major service pack version
-    SPMinor*: int ## Minor service pack version
-    SuiteMask*: int
-    ProductType*: int
-
-const
-  # SuiteMask - VersionInfo.SuiteMask
-  VER_SUITE_BACKOFFICE* = 0x00000004
-  VER_SUITE_BLADE* = 0x00000400
-  VER_SUITE_COMPUTE_SERVER* = 0x00004000
-  VER_SUITE_DATACENTER* = 0x00000080
-  VER_SUITE_ENTERPRISE* = 0x00000002
-  VER_SUITE_EMBEDDEDNT* = 0x00000040
-  VER_SUITE_PERSONAL* = 0x00000200
-  VER_SUITE_SINGLEUSERTS* = 0x00000100
-  VER_SUITE_SMALLBUSINESS* = 0x00000001
-  VER_SUITE_SMALLBUSINESS_RESTRICTED* = 0x00000020
-  VER_SUITE_STORAGE_SERVER* = 0x00002000
-  VER_SUITE_TERMINAL* = 0x00000010
-  VER_SUITE_WH_SERVER* = 0x00008000
-
-  # ProductType - VersionInfo.ProductType
-  VER_NT_DOMAIN_CONTROLLER* = 0x0000002
-  VER_NT_SERVER* = 0x0000003
-  VER_NT_WORKSTATION* = 0x0000001
-
-  VER_PLATFORM_WIN32_NT* = 2
-
-  # Product Info - getProductInfo() - (Remove unused ones ?)
-  PRODUCT_BUSINESS* = 0x00000006
-  PRODUCT_BUSINESS_N* = 0x00000010
-  PRODUCT_CLUSTER_SERVER* = 0x00000012
-  PRODUCT_DATACENTER_SERVER* = 0x00000008
-  PRODUCT_DATACENTER_SERVER_CORE* = 0x0000000C
-  PRODUCT_DATACENTER_SERVER_CORE_V* = 0x00000027
-  PRODUCT_DATACENTER_SERVER_V* = 0x00000025
-  PRODUCT_ENTERPRISE* = 0x00000004
-  PRODUCT_ENTERPRISE_E* = 0x00000046
-  PRODUCT_ENTERPRISE_EVALUATION* = 0x00000048
-  PRODUCT_ENTERPRISE_N* = 0x0000001B
-  PRODUCT_ENTERPRISE_N_EVALUATION* = 0x00000054
-  PRODUCT_ENTERPRISE_S* = 0x0000007D
-  PRODUCT_ENTERPRISE_S_EVALUATION* = 0x00000081
-  PRODUCT_ENTERPRISE_S_N* = 0x0000007E
-  PRODUCT_ENTERPRISE_S_N_EVALUATION* = 0x00000082
-  PRODUCT_ENTERPRISE_SERVER* = 0x0000000A
-  PRODUCT_ENTERPRISE_SERVER_CORE* = 0x0000000E
-  PRODUCT_ENTERPRISE_SERVER_CORE_V* = 0x00000029
-  PRODUCT_ENTERPRISE_SERVER_IA64* = 0x0000000F
-  PRODUCT_ENTERPRISE_SERVER_V* = 0x00000026
-  PRODUCT_HOME_BASIC* = 0x00000002
-  PRODUCT_HOME_BASIC_E* = 0x00000043
-  PRODUCT_HOME_BASIC_N* = 0x00000005
-  PRODUCT_HOME_PREMIUM* = 0x00000003
-  PRODUCT_HOME_PREMIUM_E* = 0x00000044
-  PRODUCT_HOME_PREMIUM_N* = 0x0000001A
-  PRODUCT_EDUCATION* = 0x00000079
-  PRODUCT_EDUCATION_N* = 0x0000007A
-  PRODUCT_HYPERV* = 0x0000002A
-  PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT* = 0x0000001E
-  PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING* = 0x00000020
-  PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY* = 0x0000001F
-  PRODUCT_PRO_WORKSTATION* = 0x000000A1
-  PRODUCT_PRO_WORKSTATION_N* = 0x000000A2
-  PRODUCT_PROFESSIONAL* = 0x00000030
-  PRODUCT_PROFESSIONAL_E* = 0x00000045
-  PRODUCT_PROFESSIONAL_N* = 0x00000031
-  PRODUCT_SERVER_FOR_SMALLBUSINESS* = 0x00000018
-  PRODUCT_SERVER_FOR_SMALLBUSINESS_V* = 0x00000023
-  PRODUCT_SERVER_FOUNDATION* = 0x00000021
-  PRODUCT_SMALLBUSINESS_SERVER* = 0x00000009
-  PRODUCT_STANDARD_SERVER* = 0x00000007
-  PRODUCT_STANDARD_SERVER_CORE * = 0x0000000D
-  PRODUCT_STANDARD_SERVER_CORE_V* = 0x00000028
-  PRODUCT_STANDARD_SERVER_V* = 0x00000024
-  PRODUCT_STARTER* = 0x0000000B
-  PRODUCT_STARTER_E* = 0x00000042
-  PRODUCT_STARTER_N* = 0x0000002F
-  PRODUCT_STORAGE_ENTERPRISE_SERVER* = 0x00000017
-  PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE* = 0x0000002E
-  PRODUCT_STORAGE_EXPRESS_SERVER* = 0x00000014
-  PRODUCT_STORAGE_STANDARD_SERVER* = 0x00000015
-  PRODUCT_STORAGE_WORKGROUP_SERVER* = 0x00000016
-  PRODUCT_UNDEFINED* = 0x00000000
-  PRODUCT_ULTIMATE* = 0x00000001
-  PRODUCT_ULTIMATE_E* = 0x00000047
-  PRODUCT_ULTIMATE_N* = 0x0000001C
-  PRODUCT_WEB_SERVER* = 0x00000011
-  PRODUCT_WEB_SERVER_CORE* = 0x0000001D
-
-  PROCESSOR_ARCHITECTURE_AMD64* = 9 ## x64 (AMD or Intel)
-  PROCESSOR_ARCHITECTURE_IA64* = 6 ## Intel Itanium Processor Family (IPF)
-  PROCESSOR_ARCHITECTURE_INTEL* = 0 ## x86
-  PROCESSOR_ARCHITECTURE_UNKNOWN* = 0xffff ## Unknown architecture.
-
-  # GetSystemMetrics
-  SM_SERVERR2 = 89
-
-proc getVersionEx(lpVersionInformation: var TOSVERSIONINFOEX): WINBOOL{.stdcall,
-    dynlib: "kernel32", importc: "GetVersionExA".}
-
-proc getProcAddress(hModule: int, lpProcName: cstring): pointer{.stdcall,
-    dynlib: "kernel32", importc: "GetProcAddress".}
-
-proc getModuleHandleA(lpModuleName: cstring): int{.stdcall,
-     dynlib: "kernel32", importc: "GetModuleHandleA".}
-
-proc rtlGetVersion(lpVersionInformation: var TOSVERSIONINFOEX): cint{.stdcall, dynlib: "ntdll",
-  importc: "RtlGetVersion".}
+include ./windefs
 
 proc getVersionInfo*(): TVersionInfo =
   ## Retrieves operating system info
@@ -192,9 +47,6 @@ proc getProductInfo(majorVersion, minorVersion, SPMajorVersion,
   else:
     return PRODUCT_UNDEFINED
 
-proc getSystemInfo(lpSystemInfo: LPSYSTEM_INFO){.stdcall, dynlib: "kernel32",
-    importc: "GetSystemInfo".}
-
 proc getSystemInfo(): TSYSTEM_INFO =
   ## Returns the SystemInfo
 
@@ -209,9 +61,6 @@ proc getSystemInfo(): TSYSTEM_INFO =
     getSystemInfo(addr(systemi))
 
   return systemi
-
-proc getSystemMetrics(nIndex: int32): int32{.stdcall, dynlib: "user32",
-    importc: "GetSystemMetrics".}
 
 proc getOsInfo*(osvi: TVersionInfo, includeEdition = false, includeSp = false, includeBuild = false, includeArch = false): string =
   ## Turns a VersionInfo object into a string
