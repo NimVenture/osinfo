@@ -1,6 +1,8 @@
 import std/[os, strutils]
 import osinfo/types
 
+export types
+
 when defined(windows):
   import osinfo/win
 elif defined(macox) or defined(macosx):
