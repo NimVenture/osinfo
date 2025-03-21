@@ -13,6 +13,15 @@ proc getDarwinOsInfo*(release: string): (string, string, string) =
       "macOS"
 
   case rel
+  of "23":
+    result[1] = "14"
+    result[2] = "Sonoma"
+  of "22":
+    result[1] = "13"
+    result[2] = "Ventura"
+  of "21":
+    result[1] = "12"
+    result[2] = "Monterey"
   of "20": 
     result[1] = "11"
     result[2] = "Big Sur"

@@ -10,6 +10,6 @@ proc `$`*(info: OsInfo): string =
   when defined(windows):
     result = info.distro & " " & info.edition 
   elif defined(macox) or defined(macosx):
-    result = info.os & " " & info.codename & " " & info.codename 
+    result = info.os & " " & info.release & " " & info.codename 
   else:
    result = info.os & " " & info.distro & " " & info.codename 

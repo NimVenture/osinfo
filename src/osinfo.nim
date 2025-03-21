@@ -4,6 +4,7 @@ import osinfo/types
 when defined(windows):
   import osinfo/win
 elif defined(macox) or defined(macosx):
+  import osinfo/posix
   import osinfo/darwin
 else:
   import osinfo/darwin
