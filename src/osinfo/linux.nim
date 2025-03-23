@@ -46,6 +46,10 @@ const DistribId2Name = {
   "Void": "Void Linux"
 }.toTable
 
+proc isVersion(s: string): bool =
+  s.len > 0 and (s[0] in {'0'..'9'} or (s.len > 1 and s[0] == 'v' and s[1] in {'0'..'9'})) and
+  s.contains('.')
+
 proc extractRelease*(content: string): (string, string, string) =
   let lines = content.splitLines
   if lines.len == 1:
@@ -72,39 +76,117 @@ proc extractRelease*(content: string): (string, string, string) =
         let cols = line.split(' ')
         result[0] = cols[0]
         if cols[1][0] == 'v':
-          # DragonFly v6.2.0.1
           result[1] = cols[1][1 .. ^1]
         else:
           result[1] = cols[1]
       else:
-        discard
-        # FIXME: cover this case see trelease.nim
+        let parts = line.split()
+        var handled = false
+        
+        # Case 1: Handle "release X.X" pattern first
+        for i in 0..<parts.len:
+          if parts[i].toLowerAscii == "release" and i+1 < parts.len:
+            result[0] = parts[0..i-1].join(" ")
+            result[1] = parts[i+1]
+            if parts.len > i+2:
+              result[2] = parts[i+2..^1].join(" ")
+            handled = true
+            break
+        
+        if not handled:
+          # Case 2: Void Linux handling
+          if parts.len > 0 and parts[0].replace("-", "").toLowerAscii == "voidlive":
+            result[0] = "Void Linux"
+            result[2] = parts[1..^1].join(" ")
+            handled = true
+          
+        if not handled:
+          # Case 3: Version detection
+          var versionIndex = -1
+          for i in 0..<parts.len:
+            if isVersion(parts[i]):
+              versionIndex = i
+              break
+          
+          if versionIndex != -1:
+            result[0] = parts[0..<versionIndex].join(" ")
+            result[1] = parts[versionIndex]
+            if parts.len > versionIndex+1:
+              result[2] = parts[versionIndex+1..^1].join(" ")
+          else:
+            result[0] = line
+        
+        # Normalization
+        let lookupKey = result[0].replace(" ", "").replace("-", "")
+        if lookupKey in DistribId2Name:
+          result[0] = DistribId2Name[lookupKey]
   else:
     var
-      idFound = false
-      releaseFound = false
-      codeFound = false
-    for line in lines:
-      if not idFound:
-        let id = line.getValue("DISTRIB_ID")
-        if id.len > 0:
-          if id in DistribId2Name:
-            result[0] = DistribId2Name[id]
-          else:
-            result[0] = id
-          idFound = true
-      if not releaseFound:
-        let release = line.getValue("DISTRIB_RELEASE")
-        if release.len > 0:
-          result[1] = release
-          releaseFound = true
-      if not codeFound:
-        let code = line.getValue("DISTRIB_CODENAME")
-        if code.len > 0:
-          result[2] = code
-          codeFound = true
-      if idFound and releaseFound and codeFound:
-        break
+      idFound = result[0].len > 0
+      releaseFound = result[1].len > 0
+      codeFound = result[2].len > 0
+    
+    if not (idFound and releaseFound and codeFound):
+      for line in lines:
+        if not idFound:
+          let id = line.getValue("DISTRIB_ID")
+          if id.len > 0:
+            result[0] = DistribId2Name.getOrDefault(id, id)
+            idFound = true
+        
+        if not releaseFound:
+          let release = line.getValue("DISTRIB_RELEASE")
+          if release.len > 0:
+            result[1] = release
+            releaseFound = true
+        
+        if not codeFound:
+          let code = line.getValue("DISTRIB_CODENAME")
+          if code.len > 0:
+            result[2] = code
+            codeFound = true
+        
+        if idFound and releaseFound and codeFound:
+          break
+    
+    # Special case: Oracle Solaris
+    if result[0].len == 0 or result[1].len == 0:
+      # Unified special case handling
+      let firstLine = if lines.len > 0: lines[0] else: ""
+      case firstLine.splitWhiteSpace(1)[0]
+      of "Oracle":
+        # Oracle Solaris handling
+        let firstLineParts = firstLine.split()
+        if firstLineParts.len >= 3:
+          result[0] = "Oracle Solaris"
+          result[1] = firstLineParts[2]
+          if firstLineParts.len > 3:
+            result[2] = firstLineParts[3..^1].join(" ")
+      
+      of "openSUSE":
+        # openSUSE handling
+        result[0] = "openSUSE"
+        # Extract version from either first line or VERSION field
+        if result[1].len == 0:
+          let versionParts = firstLine.split({' ', '('})
+          if versionParts.len >= 2:
+            result[1] = versionParts[1]
+        # Prioritize CODENAME field over architecture
+        if result[2] == "x86_64" or result[2].contains('('):
+          result[2] = ""  # Reset if we got architecture instead of codename
+        for line in lines:
+          if line.startsWith("CODENAME"):
+            result[2] = line.split("=")[1].strip()
+            break
+      
+      else:
+        # Add other special cases here
+        discard
+
+    # Final normalization pass
+    if result[0] in ["openSUSE", "Oracle Solaris"] and result[2].len == 0:
+      # Ensure codename is cleared if not found
+      result[2] = ""
 
 proc extractOsRelease*(content: string): (string, string, string) =
   let lines = splitLines(content)
