@@ -69,7 +69,7 @@ proc getSystemInfo(): TSYSTEM_INFO =
 
   return systemi
 
-proc getOsInfo*(osvi: TVersionInfo): WindowsOSInfo =
+proc toWindowsOSInfo*(osvi: TVersionInfo): WindowsOSInfo =
   ## Turns a VersionInfo object into a string
   if osvi.platformID == VER_PLATFORM_WIN32_NT and osvi.majorVersion > 4:
     # result = "Microsoft"
@@ -264,19 +264,3 @@ proc getOsInfo*(osvi: TVersionInfo): WindowsOSInfo =
     # result = "Unknown version of windows[Kernel version <= 4]"
     discard
 
-proc getOsInfo*(): WindowsOSInfo =
-  let osvi = getVersionInfo()
-  getOsInfo(osvi)
-
-proc `$`*(info: WindowsOSInfo): string = 
-  result = info.version & " " & info.edition 
-  if info.sp.len > 0:
-    result.add " " & info.sp 
-  result.add " " & "(build " & $info.buildNumber & ")" & ", " & info.arch
-
-proc `$`*(osvi: TVersionInfo): string =
-  $getOsInfo(osvi)
-
-when isMainModule:
-
-  echo getOsInfo()

@@ -5,7 +5,7 @@ export types
 
 when defined(windows):
   import osinfo/win
-elif defined(macox) or defined(macosx):
+elif defined(macos) or defined(macosx):
   import osinfo/posix
   import osinfo/darwin
 else:
@@ -17,12 +17,13 @@ else:
 proc getOsInfo*(): OsInfo =
   result = new OsInfo
   when defined(windows):
-    let info = win.getOsInfo()
+    let osvi = getVersionInfo()
+    let info = toWindowsOSInfo(osvi)
     result.os = "Windows"
     result.distro = info.version
     result.edition = info.edition
     result.release = $info.buildNumber
-  elif defined(macox) or defined(macosx):
+  elif defined(macos) or defined(macosx):
     var unix_info: Utsname
     if uname(unix_info) != 0:
       raiseOSError(osLastError())
